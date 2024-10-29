@@ -5,6 +5,10 @@ import { MAINCOLOR } from '../constants/color';
 import TopTabs from '../TabNavigations/TopTabs';
 
 
+
+
+
+
 const HomeScreen = () => {
 
 
@@ -23,7 +27,13 @@ const HomeScreen = () => {
           </View>
         </View>
       </View>
-        <TopTabs/>
+      <View style={{ flex:1, }}>
+        <TopTabs />
+        
+
+
+      </View>
+      
 
     </SafeAreaView>
   );
