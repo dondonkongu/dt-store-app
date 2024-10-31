@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ProductSection = ({ title, products }) => {
   return (
-    <View >
+    <View style={{ backgroundColor:'#fff',paddingHorizontal:5 }} >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Text style={{ fontSize: 17 }}>{title}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>

@@ -3,7 +3,7 @@ import React from 'react'
 
 const CardMedium = ({data}) => {
   return (
-    <TouchableOpacity style={{ width: 205, height: 310, justifyContent:'center', alignItems:'center', paddingTop:10}}>
+    <View style={{ width: 205, height: 310, justifyContent:'center', alignItems:'center', paddingTop:10}}>
         <View >
             <Image source={{ uri:data.url }}
             style={{ width: 205, height: 250 }} resizeMode='contain'
@@ -12,7 +12,7 @@ const CardMedium = ({data}) => {
             <Text style={styles.textName} numberOfLines={1}>{data.name}</Text>
         </View>
         
-    </TouchableOpacity>
+    </View>
   )
 }
 

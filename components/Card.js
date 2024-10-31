@@ -1,9 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View,Image } from 'react-native'
+import { StyleSheet, Text, View,Image } from 'react-native'
 import React from 'react'
 
 const Card = ({data}) => {
   return (
-    <TouchableOpacity style={{ width: 140, height: 250 }}>
+    <View style={{ width: 140, height: 250 }}>
         <View >
             <Image source={{ uri:data.url }}
             style={{ width: 140, height: 200 }} resizeMode='contain'
@@ -11,7 +11,7 @@ const Card = ({data}) => {
         </View>
         <Text style={styles.textPrice}>{data.price.toLocaleString('vi-VN')} VND</Text>
         <Text style={styles.textName} numberOfLines={1}>{data.name}</Text>
-    </TouchableOpacity>
+    </View>
   )
 }
 

@@ -4,6 +4,7 @@ import SwipperCategories from '../../components/SwipperCategories'
 import SwipperBanner from '../../components/SwipperBanner';
 import ProductSection from '../../components/ProductSection';
 import ProductList from '../../components/ProductList';
+import Collection from '../../components/Collection';
 
 
 
@@ -67,18 +68,22 @@ const products = [
 ];
 
 const Dt = () => {
+  
   return (
-    <ScrollView style={{ backgroundColor:'#fff',flex:1 }}>
+    <ScrollView  style={{ backgroundColor:'#dadada',flex:1 }}>
       <View style={{ height:200 }}>
         <SwipperBanner data={imgBanner}/>
         </View>
-      <View style={{ height:220 }}>
+      <View style={{ height:217 }}>
         <SwipperCategories data={categories}/>
       </View>
-       <View style={{ paddingHorizontal:5 }}>
+      <View style={ styles.componentContainer}>
+        <Collection/>
+      </View>
+       <View style={ styles.componentContainer} >
         <ProductSection title='Sản phẩm mới' products={products}/>
        </View>
-       <View>
+       <View style={ styles.componentContainer}>
         <ProductList title='Sản phẩm bán chạy' products={products}/>
        </View>
     </ScrollView>
@@ -87,4 +92,9 @@ const Dt = () => {
 
 export default Dt
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+componentContainer:{
+  marginBottom:8
+}
+
+})

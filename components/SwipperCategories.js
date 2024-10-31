@@ -54,6 +54,7 @@ export default SwipperCategories;
 
 const styles = StyleSheet.create({
   wrapper: {
+    backgroundColor: '#fff',
     height: 200,
   },
   slide: {
