@@ -3,6 +3,7 @@ import React from 'react';
 import { MAINCOLOR } from '../constants/color';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import SecondButton from '../components/SecondButton';
 
 const AccountScreen = () => {
   const nav = useNavigation();
@@ -13,7 +14,7 @@ const AccountScreen = () => {
       </View>
       <View style={styles.authenticate}>
         <View >       
-           <Button title="Đăng nhập" width={120} height={40} onPress={()=>nav.navigate('Login')}  />
+           <SecondButton title="Đăng nhập" width={120} height={40} onPress={()=>nav.navigate('Login')}  />
         </View>
         <View>
           <Button title="Đăng ký" width={120} height={40} onPress={()=>nav.navigate('Register')} />
