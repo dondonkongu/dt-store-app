@@ -1,15 +1,21 @@
 import { StyleSheet, Text, Image, View, TextInput } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { CheckBox, Input } from '@rneui/themed';
 import { useState } from 'react';
 import Button from '../components/Button';
 import Line from '../components/Line';
+import AuthContext from '../context/AuthContext';
+
 
 const Login = ({ navigation }) => {
+    const {login} = useContext(AuthContext)
+
 
     const [isSelected, setSelection] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -25,7 +31,8 @@ const Login = ({ navigation }) => {
 
     }
     const handleLogin = () => {
-        console.log('login');
+        login(username,password)
+        console.log(username,password);
 
     }
 
@@ -56,6 +63,9 @@ const Login = ({ navigation }) => {
                         />
                         <TextInput placeholder='username'
                             style={styles.textInput}
+                            value={username}
+                            onChangeText={(text)=>{
+                                setUsername(text)} }
                         />
                     </View>
                     <View style={styles.viewInput}>
@@ -65,8 +75,10 @@ const Login = ({ navigation }) => {
                             color='black'
                         />
                         <TextInput placeholder='password'
+                            value={password}
                             style={styles.textInput}
                             secureTextEntry={!showPassword}
+                            onChangeText={(text)=>setPassword(text) }
                         />
                         <Ionicons
                             onPress={handleShowPassword}

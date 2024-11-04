@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabs from './TabNavigations/BottomTabs';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import AuthProvider from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 
 
 const Stack = createNativeStackNavigator();

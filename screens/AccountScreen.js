@@ -1,12 +1,14 @@
 import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { MAINCOLOR } from '../constants/color';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import SecondButton from '../components/SecondButton';
+import AuthContext from '../context/AuthContext';
 
 const AccountScreen = () => {
   const nav = useNavigation();
+  const {isLoggedIn,logout} = useContext(AuthContext)
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -19,6 +21,7 @@ const AccountScreen = () => {
         <View>
           <Button title="Đăng ký" width={120} height={40} onPress={()=>nav.navigate('Register')} />
         </View>
+        {isLoggedIn && <Button title="Đăng xuất" width={120} height={40} onPress={logout} />}
       </View>
     </SafeAreaView>
   );
