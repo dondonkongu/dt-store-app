@@ -34,7 +34,7 @@ export const AuthProvider  = ({ children}) => {
                 
             }catch(err){
               console.log(err);
-                throw new Error(err.response.data.message||'dang nhap that bai')
+                throw new Error(err.response?.data?.result?.message||'dang nhap that bai')
             }
     }
     const logout = async()=>{    
