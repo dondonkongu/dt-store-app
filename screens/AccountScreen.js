@@ -12,7 +12,7 @@ import BASE_URL from '../api';
 const AccountScreen = () => {
   const nav = useNavigation();
   const {isLoggedIn,logout} = useContext(AuthContext)
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
 
 
   const getUserDetail = async (accessToken) => { 
@@ -38,10 +38,11 @@ const AccountScreen = () => {
     };
 
     fetchUserData(); 
-}, []);
+}, [isLoggedIn]);
 
 const handleLogout = () => {
   logout()
+  setUser({})
   nav.navigate('Login')
 }
 
@@ -53,7 +54,7 @@ return (
 
       {isLoggedIn ? (
           <View>
-              <Text>{user.name}</Text>
+              <Text>{user.username}</Text>
               <Button
                   title="Đăng xuất"
                   width={120}

@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import React, { createContext, useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import BASE_URL from '../api'
 import { storedToken,getToken, removeToken } from '../service/asyncStorageService'
 
@@ -34,13 +33,14 @@ export const AuthProvider  = ({ children}) => {
                 
             }catch(err){
               console.log(err);
-                throw new Error(err.response?.data?.result?.message||'dang nhap that bai')
+                Alert.alert('Thông báo',err.response?.data?.message||'dang nhap that bai')
             }
     }
     const logout = async()=>{    
             await removeToken()
             setToken(null)
             setIsLoggedIn(false)
+            console.log('Token sau khi logout:', token);
     }
 
   return (
