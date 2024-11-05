@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Image, View, TextInput } from 'react-native';
+import { StyleSheet, Text, Image, View, TextInput, Alert } from 'react-native';
 import React, { useContext } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { CheckBox, Input } from '@rneui/themed';
@@ -30,9 +30,15 @@ const Login = ({ navigation }) => {
         console.log('login with google');
 
     }
-    const handleLogin = () => {
-        login(username,password)
-        console.log(username,password);
+    const handleLogin = async() => {
+        try { 
+            await login(username,password)
+            navigation.goBack()
+            
+        } catch (err) {
+            console.log(err);
+                Alert.alert('Thông báo',err.response?.data?.message||'dang nhap that bai')
+        }
 
     }
 

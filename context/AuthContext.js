@@ -29,18 +29,21 @@ export const AuthProvider  = ({ children}) => {
                 storedToken(token)
                 setToken(token) 
                 setIsLoggedIn(true)
-                console.log(token);
                 
             }catch(err){
-              console.log(err);
-                Alert.alert('Thông báo',err.response?.data?.message||'dang nhap that bai')
+              throw err
             }
     }
     const logout = async()=>{    
+            try{
+                await BASE_URL.post('identity/auth/logout',{token})
             await removeToken()
             setToken(null)
             setIsLoggedIn(false)
-            console.log('Token sau khi logout:', token);
+            }catch(err){
+                console.log(err);
+                Alert.alert('Thông báo',err.response?.data?.message||'dang xuat that bai')
+            }
     }
 
   return (

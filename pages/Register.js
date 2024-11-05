@@ -1,14 +1,20 @@
-import { StyleSheet, Text, Image, View, TextInput } from 'react-native';
+import { StyleSheet, Text, Image, View, TextInput, Alert } from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { CheckBox, Input } from '@rneui/themed';
 import { useState } from 'react';
 import Button from '../components/Button';
 import Line from '../components/Line';
+import BASE_URL from '../api';
 
 const Register = ({ navigation }) => {
 
-  const [isSelected, setSelection] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [dob, setDob] = useState('');
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPassword = () => {
@@ -24,9 +30,20 @@ const Register = ({ navigation }) => {
     console.log('login with google');
 
   }
-  const handleLogin = () => {
-    console.log('login');
-
+  const handleRegister = () => {
+      BASE_URL.post('identity/users/registration', {username,password,firstName,lastName,dob})
+      .then((response) => {
+        console.log(response.data);
+        Alert.alert('Thông báo', 'Đăng kí thành công', [
+          {text: 'OK', onPress: () =>  navigation.navigate('Login')},
+        ])
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        Alert.alert('Thông báo', error?.response?.data.message, [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ])
+      });
   }
 
   return (
@@ -54,17 +71,9 @@ const Register = ({ navigation }) => {
               size={24}
               color='black'
             />
-            <TextInput placeholder='Họ và tên'
-              style={styles.textInput}
-            />
-          </View>
-          <View style={styles.viewInput}>
-            <Ionicons
-              name='person-outline'
-              size={24}
-              color='black'
-            />
             <TextInput placeholder='username'
+              value={username}
+              onChangeText={(text) => setUsername(text)}
               style={styles.textInput}
             />
           </View>
@@ -75,6 +84,8 @@ const Register = ({ navigation }) => {
               color='black'
             />
             <TextInput placeholder='password'
+              value={password}
+              onChangeText={(text) => setPassword(text)}
               style={styles.textInput}
               secureTextEntry={!showPassword}
             />
@@ -84,10 +95,45 @@ const Register = ({ navigation }) => {
               size={24}
               color='black'
             />
-
           </View>
+         
+          <View style={styles.viewInput}>
+            <Ionicons
+              name='person-outline'
+              size={24}
+              color='black'
+            />
+            <TextInput placeholder='First Name'
+              value={firstName}
+              onChangeText={(text) => setFirstName(text)}
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.viewInput}>
+            <Ionicons
+              name='person-outline'
+              size={24}
+              color='black'
+            />
+            <TextInput placeholder='Last Name'
+            value={lastName}
+            onChangeText={(text) => setLastName(text)}
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.viewInput}>
+            <Ionicons
+              name='person-outline'
+              size={24}
+              color='black'
+            />
+            <TextInput placeholder='Date of Birth'
+              style={styles.textInput}
+            />
+          </View>
+         
           <View style={styles.buttonContainer}>
-            <Button title='Đăng Ký' width='100%' height={50} onPress={handleLogin} />
+            <Button title='Đăng Ký' width='100%' height={50} onPress={handleRegister} />
           </View>
           <View style={[styles.buttonContainer, { marginTop: 10 }]}>
             <Line title='HOẶC ĐĂNG KÍ BẰNG' />
