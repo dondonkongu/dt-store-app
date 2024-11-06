@@ -4,6 +4,7 @@ import BottomTabs from './TabNavigations/BottomTabs';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
+import DetailProduct from './screens/DetailProduct';
 
 
 const Stack = createNativeStackNavigator();
@@ -17,6 +18,7 @@ export default function App() {
         <Stack.Screen name="BottomTabs" component={BottomTabs} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="DetailProduct" component={DetailProduct} />
         </Stack.Navigator>
       </NavigationContainer>
       </AuthProvider>

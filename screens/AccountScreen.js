@@ -1,4 +1,4 @@
-import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View, ScrollView } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import { MAINCOLOR } from '../constants/color';
 import Button from '../components/Button';
@@ -8,6 +8,7 @@ import AuthContext from '../context/AuthContext';
 import { getToken } from '../service/asyncStorageService';
 import { useState } from 'react';
 import BASE_URL from '../api';
+import MenuItem from '../components/MenuItem';
 
 const AccountScreen = () => {
   const nav = useNavigation();
@@ -45,15 +46,30 @@ const handleLogout = () => {
   setUser({})
   nav.navigate('Login')
 }
+const menuItems=[
+  {icons:'headset-outline',title:'Trung tâm trợ giúp'},
+  {icons:'heart-outline',title:'Sản phẩm đã thích'},
+  {icons:'eye-outline',title:'Sản phẩm đã xem'},
+  {icons:'star-outline',title:'Đánh giá của tôi'},
+  {icons:'share-social-outline',title:'Giới thiệu bạn bè'},
+  {icons:'location-outline',title:'Hệ thống cửa hàng'},
+  {icons:'information-circle-outline',title:'Về chúng tôi'},
+
+]
+const userMenu=[
+  {icons:'reader-outline',title:'Thông tin cá nhân'},
+  {icons:'settings-outline',title:'Cài đặt'},
+]
 
 return (
   <SafeAreaView style={styles.container}>
       <View style={styles.header}>
           <Text style={styles.headerText}>Tài khoản</Text>
       </View>
-
+      
+    <ScrollView showsVerticalScrollIndicator={false}>
       {isLoggedIn ? (
-          <View>
+          <View style={styles.authenticate}>
               <Text>{user.username}</Text>
               <Button
                   title="Đăng xuất"
@@ -82,6 +98,21 @@ return (
               </View>
           </View>
       )}
+      <View style={styles.box}>
+          <MenuItem icon='cart-outline' title='Tra cứu đơn hàng' />
+      </View>
+      <View style={styles.box}>
+          {menuItems.map((item,index)=>(
+            <MenuItem key={index} icon={item.icons} title={item.title} />
+          ))}
+      </View>
+      <View style={styles.box}>
+          {userMenu.map((item,index)=>(
+            <MenuItem key={index} icon={item.icons} title={item.title} />
+          ))}
+      </View>
+      </ScrollView>
+
   </SafeAreaView>
 );
 
@@ -92,6 +123,7 @@ export default AccountScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f0f0f0', 
   },
   header: {
     backgroundColor: MAINCOLOR,
@@ -107,10 +139,18 @@ const styles = StyleSheet.create({
   },
   authenticate: {
     backgroundColor: 'white',
-    height: 150,
+    height: 120,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    borderBottomWidth:0.5,
+    borderColor:'#ccc'
   },
+  box:{
+    backgroundColor: 'white',
+    marginTop:10,
+    borderBottomWidth:0.5,
+    borderColor:'#ccc'
+  }
 
 });

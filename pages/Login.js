@@ -1,7 +1,7 @@
 import { StyleSheet, Text, Image, View, TextInput, Alert } from 'react-native';
 import React, { useContext } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { CheckBox, Input } from '@rneui/themed';
+import { CheckBox } from '@rneui/themed';
 import { useState } from 'react';
 import Button from '../components/Button';
 import Line from '../components/Line';
