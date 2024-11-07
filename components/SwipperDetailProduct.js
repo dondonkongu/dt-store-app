@@ -35,9 +35,7 @@ const SwipperDetailProduct = () => {
             <View
             key={index}
             style={styles.slide}
-            title={
-              <Text numberOfLines={1}>Aussie tourist dies at Bali hotel</Text>
-            }
+           
           >
             <Image style={styles.image} source={{ uri:item.link }} />
           </View>

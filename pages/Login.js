@@ -125,7 +125,7 @@ const Login = ({ navigation }) => {
                     </View>
                 </View>
                 <View style={styles.bottomText}>
-                    <Text>Bằng việc chọn đăng nhập, bạn xác nhận đã đọc và đồng ý với các<Text style={styles.innerText}> Điều Khoản Sử Dụng</Text> cùng<Text style={styles.innerText}> Chính Sách Bảo Mật & Chia Sẻ Thông Tin</Text> của DT Store</Text>
+                    <Text>Bằng việc chọn đăng nhập, bạn xác nhận đã đọc và đồng ý với các<Text style={styles.innerText}> Điều Khoản Sử Dụng</Text> cùng<Text style={styles.innerText} onPress={()=>navigation.navigate('PrivacyPolicy')}> Chính Sách Bảo Mật & Chia Sẻ Thông Tin</Text> của DT Store</Text>
                 </View>
             </View>
 
