@@ -1,12 +1,33 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, } from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const MyAppTitle = ({children}) => {
+const MyAppTitle = ({title, navigation}) => {
   return (
-    <MyAppTitle>
-      <Text style={{ fontSize: 20,color:'#fff', fontWeight:'semibold' }}>{children}</Text>
-    </MyAppTitle>
+    <View style={styles.header}>
+      <Ionicons name="arrow-back" size={26} color="white" onPress={() => navigation.goBack()} />
+      <Text style={styles.headerText}>{title}</Text>
+      <View style={{ width: 26 }} /> 
+    </View>
   )
 }
 
 export default MyAppTitle
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: "#cc3333",
+    width: '100%',
+    paddingHorizontal: 10,
+    height: 70,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    paddingBottom: 5,
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+})

@@ -6,6 +6,7 @@ import SwipperDetailProduct from '../components/SwipperDetailProduct';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SizeChart from '../components/SizeChart';
 import Button from '../components/Button';
+import LineWithoutTitle from '../components/LineWithoutTitle';
 
 
 
@@ -19,6 +20,11 @@ const img = [
 const DetailProduct = ({ navigation }) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleBuy = () => {
+    setIsModalVisible(false)
+    navigation.navigate('Checkout')
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -163,7 +169,7 @@ const DetailProduct = ({ navigation }) => {
                 </TouchableWithoutFeedback>
               </View>
             </View>
-            <View style={{ height: 1, backgroundColor: '#ccc', }}></View>
+            <LineWithoutTitle />
             <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'space-between' }}>
               <Text style={{ padding: 10 }}>Số lượng</Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
@@ -181,7 +187,7 @@ const DetailProduct = ({ navigation }) => {
               </View>
             </View>
             <View style={{flex:1,justifyContent:'center', alignItems:'center', padding:10 }}>
-              <Button title='Mua ngay' width='100%' height={40} />
+              <Button title='Mua ngay' width='100%' height={40} onPress={handleBuy} />
             </View>
 
           </View>
