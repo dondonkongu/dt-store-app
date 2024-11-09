@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableWithoutFeedback } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableWithoutFeedback, Modal } from 'react-native'
+import React, { useState } from 'react'
 import { MAINCOLOR } from '../constants/color'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SwipperDetailProduct from '../components/SwipperDetailProduct';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SizeChart from '../components/SizeChart';
+import Button from '../components/Button';
+
 
 
 
@@ -15,6 +17,8 @@ const img = [
 
 ]
 const DetailProduct = ({ navigation }) => {
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,20 +58,20 @@ const DetailProduct = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.detailProduct}>
-          <View style={{ paddingVertical:10 }}>
-            <Text style={{ fontSize: 17, fontWeight: 600,paddingBottom:5 }}>CHI TIẾT SẢN PHẨM</Text>
+          <View style={{ paddingVertical: 10 }}>
+            <Text style={{ fontSize: 17, fontWeight: 600, paddingBottom: 5 }}>CHI TIẾT SẢN PHẨM</Text>
             <Text style={{ fontSize: 14 }}>-Tên sản phẩm: </Text>
             <Text style={{ fontSize: 14 }}>-Chất liệu: </Text>
             <Text style={{ fontSize: 14 }}>-Màu sắc: </Text>
             <Text style={{ fontSize: 14 }}>-Họa tiết: </Text>
             <Text style={{ fontSize: 14 }}>-Xuất xứ: </Text>
           </View>
-          <View style={{ paddingVertical:10 }}>
+          <View style={{ paddingVertical: 10 }}>
             <Text style={{ fontSize: 17, fontWeight: 600 }}>HƯỚNG DẪN CHỌN SIZE</Text>
             <SizeChart />
           </View>
-          <View style={{ paddingVertical:10 }}>
-            <Text style={{ fontSize: 17, fontWeight: 600 , paddingBottom:5}}>HƯỚNG DẪN BẢO QUẢN VÀ SỬ DỤNG</Text>
+          <View style={{ paddingVertical: 10 }}>
+            <Text style={{ fontSize: 17, fontWeight: 600, paddingBottom: 5 }}>HƯỚNG DẪN BẢO QUẢN VÀ SỬ DỤNG</Text>
             <Text style={{ fontSize: 14 }}>- Lần đầu chỉ xả nước lạnh và nước xả vải rồi phơi khô để đảm bảo chất và màu của sản phẩm.</Text>
             <Text style={{ fontSize: 14 }}>- Nhớ lộn trái sản phẩm khi giặt và không giặt ngâm</Text>
             <Text style={{ fontSize: 14 }}>- Không sử dụng thuốc tẩy.</Text>
@@ -76,6 +80,78 @@ const DetailProduct = ({ navigation }) => {
         </View>
 
       </ScrollView>
+      <View style={styles.action}>
+        <View style={[styles.nameProduct, { padding: 10, backgroundColor: '#fff', borderTopWidth: 0.5, borderColor: '#ccc' }]}>
+          <TouchableWithoutFeedback onPress={() => console.log('chat')} >
+            <View style={styles.bottomItem}>
+              <FontAwesome name='commenting-o' size={25} color='black' />
+              <Text>Chat ngay</Text>
+            </View>
+          </TouchableWithoutFeedback >
+          <View style={{ width: 1, backgroundColor: '#ccc', height: 40, marginHorizontal: 5 }}></View>
+          <TouchableWithoutFeedback onPress={() => console.log('gio hang')}>
+            <View style={styles.bottomItem}>
+              <FontAwesome name='cart-plus' size={25} color='black' />
+              <Text>Giỏ hàng</Text>
+            </View>
+          </TouchableWithoutFeedback >
+          <Button title='Mua ngay' height={40} width={120} onPress={() => setIsModalVisible(true)} />
+        </View>
+      </View>
+      <Modal visible={isModalVisible} transparent={true} animationType='slide'>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <View style={{ backgroundColor: '#fff', width: '100%', height: 500, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
+            <View style={styles.headerModal}>
+              <View style={styles.imageModal}>
+                <Image source={{ uri: 'https://media-fmplus.cdn.vccloud.vn/uploads/products/2405ASUO0042101/5283b2af-8bb8-4d6d-afc8-a267998edf5f.jpg' }} style={{ width: 80, height: 100 }} resizeMode='contain' />
+              </View>
+              <View style={styles.infoProduct}>
+                <Text style={{ fontSize: 17, fontWeight: '600' }}>ten san pham</Text>
+                <View style={styles.nameProduct}>
+                  <Text>da ban :114</Text>
+                  <View style={{ width: 1, backgroundColor: '#ccc', height: 13, marginHorizontal: 5 }}></View>
+                  <Text>con lai : 100</Text>
+                </View>
+                <Text style={{ marginTop: 20, color: 'red', fontSize: 15 }}>329.000 vnd</Text>
+              </View>
+            </View>
+            <View style={{ height: 1, backgroundColor: '#ccc', }}></View>
+            <View style={{ padding: 10 }}>
+              <Text>Mau sac</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, }}>
+                <TouchableWithoutFeedback onPress={() => console.log('mau sac')}
+                >
+                  <View style={{ width: 40, height: 40, backgroundColor: '#fff', borderRadius: 999, borderColor: '#ccc', borderWidth: 1 }}></View>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => console.log('mau sac')}
+                >
+                  <View style={{ width: 40, height: 40, backgroundColor: '#fff', borderRadius: 999, borderColor: '#ccc', borderWidth: 1 }}></View>
+                </TouchableWithoutFeedback>
+              </View>
+              <Text>Size</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, }}>
+                <TouchableWithoutFeedback onPress={() => console.log('size')}>
+                  <View style={{ width: 50, height: 40, backgroundColor: '#fff', borderRadius: 999, borderColor: '#ccc', borderWidth: 1 ,justifyContent:'center',}}>
+                    <Text style={{ textAlign: 'center' ,fontSize:17}}>S</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => console.log('mau sac')}
+                >
+                  <View style={{ width: 50, height: 40, backgroundColor: '#fff', borderRadius: 999, borderColor: '#ccc', borderWidth: 1 ,justifyContent:'center'}}>
+                  <Text style={{ textAlign: 'center' ,fontSize:17}}>M</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            </View>
+
+
+
+
+            <Button title='Đóng' onPress={() => setIsModalVisible(false)} />
+          </View>
+        </View>
+      </Modal>
+
     </SafeAreaView>
   )
 }
@@ -111,5 +187,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 10,
   },
+  bottomItem: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    width: 100,
+  },
+  headerModal: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    padding: 10,
+    gap: 10,
+  },
+  infoProduct: {
+
+  }
 
 })
