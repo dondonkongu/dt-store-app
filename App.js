@@ -8,6 +8,7 @@ import DetailProduct from './screens/DetailProduct';
 import ShippingPolicy from './screens/policyScreen/ShippingPolicy';
 import ReturnPolicy from './screens/policyScreen/ReturnPolicy';
 import PrivacyPolicy from './screens/policyScreen/PrivacyPolicy';
+import Checkout from './screens/CheckoutAndPayment/Checkout';
 
 
 const Stack = createNativeStackNavigator();
@@ -25,6 +26,7 @@ export default function App() {
         <Stack.Screen name="ShippingPolicy" component={ShippingPolicy} />
         <Stack.Screen name="ReturnPolicy" component={ReturnPolicy} />
         <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+        <Stack.Screen name="Checkout" component={Checkout} />
         </Stack.Navigator>
       </NavigationContainer>
       </AuthProvider>
