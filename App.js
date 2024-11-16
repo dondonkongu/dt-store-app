@@ -9,6 +9,7 @@ import ShippingPolicy from './screens/policyScreen/ShippingPolicy';
 import ReturnPolicy from './screens/policyScreen/ReturnPolicy';
 import PrivacyPolicy from './screens/policyScreen/PrivacyPolicy';
 import Checkout from './screens/CheckoutAndPayment/Checkout';
+import Search from './pages/Search';
 
 
 const Stack = createNativeStackNavigator();
@@ -28,6 +29,7 @@ export default function App() {
         <Stack.Screen name="ReturnPolicy" component={ReturnPolicy} />
         <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
         <Stack.Screen name="Checkout" component={Checkout} />
+        <Stack.Screen name="Search" component={Search} />
         </Stack.Navigator>
       </NavigationContainer>
       </AuthProvider>

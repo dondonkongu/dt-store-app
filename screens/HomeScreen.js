@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MAINCOLOR } from '../constants/color';
@@ -9,18 +9,20 @@ import TopTabs from '../TabNavigations/TopTabs';
 
 
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
 
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <View style={styles.inputSearch}>
+          <TouchableWithoutFeedback onPress={()=>navigation.navigate('Search')}>
+          <View style={styles.inputSearch} >
             <Ionicons name='search' size={24} color='#000' />
-            <TextInput style={styles.searchText}
-              placeholder='Tìm kiếm' />
+            {/* <TextInput style={styles.searchText}
+              placeholder='Tìm kiếm' /> */}
           </View>
+          </TouchableWithoutFeedback>
           <View style={styles.icon}>
             <Ionicons name='notifications-outline' size={26} color='#fff' />
             <Ionicons name='cart-outline' size={26} color='#fff' />
