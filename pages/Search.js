@@ -9,7 +9,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, { useState, useRef, useCallback } from 'react';
-import axios from 'axios';
 import { MAINCOLOR } from '../constants/color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BASE_URL from '../api';
@@ -67,9 +66,10 @@ const Search = ({ navigation }) => {
               style={styles.searchText}
               placeholder="Tìm kiếm"
               value={searchText}
-              onChangeText={handleInputChange} // Gọi debounce
+              onChangeText={handleInputChange} 
             />
           </View>
+          <Ionicons name="filter" size={24} color="#fff" onPress={() => navigation.navigate('Filter')} />
         </View>
       </View>
 
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 30,
     padding: 10,
+    gap:10,
   },
   inputSearch: {
     flexDirection: 'row',
