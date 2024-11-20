@@ -11,45 +11,66 @@ import { useRoute } from '@react-navigation/native';
 import BASE_URL from '../api';
 
 
-
-
-const img = [
-  { id: 1, link: 'https://media-fmplus.cdn.vccloud.vn/uploads/products/2405ASUO0042101/5283b2af-8bb8-4d6d-afc8-a267998edf5f.jpg' },
-  { id: 2, link: 'https://media-fmplus.cdn.vccloud.vn/uploads/products/2405ASUO0042101/f5316516-74df-44c2-8814-583f32a19cff.jpg' },
-  { id: 2, link: 'https://media-fmplus.cdn.vccloud.vn/uploads/products/2405ASUO0042101/09c33213-e804-48d3-af45-86d068f8b214.jpg' },
-
-]
 const DetailProduct = ({ navigation }) => {
-  
+
   const route = useRoute();
   const { idProduct } = route.params;
+  const { imageUrl } = route.params;
   console.log(idProduct);
-  
-  
+
+
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [product, setProduct] = useState({});
   const [imageUrls, setImageUrls] = useState([]);
 
-  const fetchProduct = async ()=>{
-    try{
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [solded, setSolded] = useState(0);
+  const [remain, setRemain] = useState(0)
+  const [selectedColor, setSelectedColor] = useState(null); // Màu sắc được chọn
+  const [availableSizes, setAvailableSizes] = useState([]); // Các kích thước theo màu
+
+
+  const handleColorSelect = (color) => {
+    setSelectedColor(color);
+    const selectedImage = product.images.find((image) => image.color === color);
+    setAvailableSizes(selectedImage?.sizes || []);
+    setSelectedSize(null); // Reset kích thước đã chọn
+    setSolded(0); // Reset số lượng đã bán
+    setRemain(0); // Reset số lượng còn lại
+  };
+
+
+  const handleSizeSelect = (size) => {
+    setSelectedSize(size.name);
+    setSolded(size.sold);
+    setRemain(size.quantity - size.sold);
+  };
+
+
+
+  const fetchProduct = async () => {
+    try {
       const response = await BASE_URL.get(`/dt-store/products/${idProduct}`)
-      console.log(response.data);
-      
       setProduct(response.data.result)
       setImageUrls(response.data.result.images)
-      console.log(response.data?.result);
-      
-      
-    }catch(err){
-      console.log(err);
-  }
-}
 
-  useEffect(()=>{
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const sold = product?.images
+    ?.flatMap((image) => image.sizes)
+    ?.reduce((total, size) => total + size.sold, 0) ?? 0
+
+  const remaining = product?.images
+    ?.flatMap((image) => image.sizes)
+    ?.reduce((total, size) => total + size.quantity, 0) ?? 0
+
+  useEffect(() => {
     fetchProduct()
-  },[])
-  
+  }, [])
+
 
   const handleBuy = () => {
     setIsModalVisible(false)
@@ -63,22 +84,26 @@ const DetailProduct = ({ navigation }) => {
         <Ionicons name='cart-outline' size={26} color='#fff' />
       </View>
       <ScrollView style={styles.content}>
-        <SwipperDetailProduct img={imageUrls}/>
+        <SwipperDetailProduct img={imageUrls} />
         <View style={{ paddingHorizontal: 10, borderBottomWidth: 1, borderColor: "#ccc", backgroundColor: '#fff' }}>
-          <View style={[styles.nameProduct,{marginVertical:10}]}>
+          <View style={[styles.nameProduct, { marginVertical: 10 }]}>
             <Text style={{ fontSize: 17, fontWeight: 600, width: '95%' }} numberOfLines={1}>{product.name}</Text>
             <Ionicons name='heart-outline' size={23} color='black' />
           </View>
           <View style={styles.nameProduct}>
-            <Text style={{ color: 'red', fontSize: 17 }}>{product.price.toLocaleString('vi-VN')} VND</Text>
+            <Text style={{ color: 'red', fontSize: 17 }}>
+              {product?.price !== undefined
+                ? `${product.price.toLocaleString('vi-VN')} VND`
+                : 'Price not available'}
+            </Text>
             <View style={styles.nameProduct}>
-              <Text>Đã bán :{product.images
-                  .flatMap((image) => image.sizes)
-                  .reduce((total, size) => total + size.sold, 0)}</Text>
+              <Text>
+                Đã bán : {sold}
+              </Text>
               <View style={{ width: 1, backgroundColor: '#ccc', height: 13, marginHorizontal: 5 }}></View>
-              <Text>Còn lại : {product.images
-                  .flatMap((image) => image.sizes)
-                  .reduce((total, size) => total + size.quantity, 0)}</Text>
+              <Text>
+                Còn lại : {remaining}
+              </Text>
             </View>
           </View>
           <View style={{ flex: 1, height: 1, backgroundColor: '#ccc', }}></View>
@@ -98,14 +123,22 @@ const DetailProduct = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.detailProduct}>
-          <View style={{ paddingVertical: 10 }}>
-            <Text style={{ fontSize: 17, fontWeight: 600, paddingBottom: 5 }}>CHI TIẾT SẢN PHẨM</Text>
-            <Text style={{ fontSize: 14 }}>-Tên sản phẩm: {product.name}</Text>
-            <Text style={{ fontSize: 14 }}>-Chất liệu: {product.material} </Text>
-            <Text style={{ fontSize: 14 }}>-Màu sắc: {product.images.map(image => image.color).join('/')}</Text>
-            <Text style={{ fontSize: 14 }}>-Họa tiết: {[...new Set(product.images.flatMap(image => image.sizes.map(size => size.name)))].join(' / ')}</Text>
-            <Text style={{ fontSize: 14 }}>-Xuất xứ: {product.origin}</Text>
+          <View style={{ paddingVertical: 10, gap: 10 }}>
+            <Text style={{ fontSize: 17, fontWeight: '600', paddingBottom: 5 }}>CHI TIẾT SẢN PHẨM</Text>
+            <Text style={{ fontSize: 14 }}>-Tên sản phẩm: {product?.name ?? 'Không có thông tin'}</Text>
+            <Text style={{ fontSize: 14 }}>-Chất liệu: {product?.material ?? 'Không có thông tin'}</Text>
+            <Text style={{ fontSize: 14 }}>
+              -Màu sắc: {product?.images?.map(image => image.color).join('/') ?? 'Không có thông tin'}
+            </Text>
+            <Text style={{ fontSize: 14 }}>
+              -Kích cỡ :
+              {product?.images
+                ? [...new Set(product.images.flatMap(image => image.sizes.map(size => size.name)))].join(' / ')
+                : 'Không có thông tin'}
+            </Text>
+            <Text style={{ fontSize: 14 }}>-Xuất xứ: {product?.origin ?? 'Không có thông tin'}</Text>
           </View>
+
           <View style={{ paddingVertical: 10 }}>
             <Text style={{ fontSize: 17, fontWeight: 600 }}>HƯỚNG DẪN CHỌN SIZE</Text>
             <SizeChart />
@@ -147,64 +180,77 @@ const DetailProduct = ({ navigation }) => {
       <Modal visible={isModalVisible} transparent={true} animationType='slide'>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end', alignItems: 'center' }}>
           <View style={{ backgroundColor: '#fff', width: '100%', height: 450, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-           
+
             <View style={styles.headerModal}>
               <View style={styles.imageModal}>
-                <Image source={{ uri: 'https://media-fmplus.cdn.vccloud.vn/uploads/products/2405ASUO0042101/5283b2af-8bb8-4d6d-afc8-a267998edf5f.jpg' }} style={{ width: 80, height: 100 }} resizeMode='contain' />
+                <Image source={{ uri: imageUrl }} style={{ width: 80, height: 100 }} resizeMode='contain' />
               </View>
               <View style={styles.infoProduct}>
-                <Text style={{ fontSize: 17, fontWeight: '600' }} numberOfLines={1}>ten san pham</Text>
-                <View style={{ flexDirection: "row",alignItems: "center" }}>
-                  <Text>da ban :114</Text>
+                <Text style={{ fontSize: 17, fontWeight: '600' }} numberOfLines={1}>{product.name}</Text>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text>da ban :{solded}</Text>
                   <View style={{ width: 1, backgroundColor: '#ccc', height: 13, marginHorizontal: 5 }}></View>
-                  <Text>con lai : 100</Text>
+                  <Text>con lai : {remain}</Text>
                 </View>
-                <Text style={{ marginTop: 20, color: 'red', fontSize: 15 }}>329.000 vnd</Text>
+                <Text style={{ marginTop: 20, color: 'red', fontSize: 15 }}>{product?.price !== undefined
+                  ? `${product.price.toLocaleString('vi-VN')} VND`
+                  : 'not available'}</Text>
               </View>
               <View>
-              <TouchableWithoutFeedback onPress={() => setIsModalVisible(false)} style={{ position:'absolute',top:0,right:0 }}>
-              <View style={{ width: '100%', height: 40, justifyContent: 'center', alignItems: 'flex-end', paddingRight: 10 }}>
-                <Ionicons name='close' size={30} color='black' />
-              </View>
-            </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => setIsModalVisible(false)} style={{ position: 'absolute', top: 0, right: 0 }}>
+                  <View style={{ width: '100%', height: 40, justifyContent: 'center', alignItems: 'flex-end', paddingRight: 10 }}>
+                    <Ionicons name='close' size={30} color='black' />
+                  </View>
+                </TouchableWithoutFeedback>
               </View>
             </View>
             <View style={{ height: 1, backgroundColor: '#ccc', }}></View>
             <View style={{ padding: 10 }}>
-              <Text style={{ marginBottom: 10 }}>Mau sac</Text>
+              {/* Màu sắc */}
+              <Text style={{ marginBottom: 10 }}>Màu sắc</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-                <TouchableWithoutFeedback onPress={() => console.log('mau sac')}
-                >
-                  <View style={{ width: 40, height: 40, backgroundColor: '#fff', borderRadius: 999, borderColor: '#ccc', borderWidth: 1 }}></View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => console.log('mau sac')}
-                >
-                  <View style={{ width: 40, height: 40, backgroundColor: '#fff', borderRadius: 999, borderColor: '#ccc', borderWidth: 1 }}></View>
-                </TouchableWithoutFeedback>
+                {product?.images?.map((image) => (
+                  <TouchableWithoutFeedback key={image.color} onPress={() => handleColorSelect(image.color)}>
+                    <Image
+                      source={{ uri: image.url }}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 999,
+                        borderColor: selectedColor === image.color ? 'red' : '#ccc',
+                        borderWidth: 1,
+                      }}
+                    />
+                  </TouchableWithoutFeedback>
+                ))}
               </View>
-              <Text style={{ marginBottom: 10 }}>Size</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, }}>
-                <TouchableWithoutFeedback onPress={() => console.log('size')}>
-                  <View style={{ width: 50, height: 40, backgroundColor: '#fff', borderRadius: 999, borderColor: '#ccc', borderWidth: 1, justifyContent: 'center', }}>
-                    <Text style={{ textAlign: 'center', fontSize: 17 }}>S</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => console.log('mau sac')}
-                >
-                  <View style={{ width: 50, height: 40, backgroundColor: '#fff', borderRadius: 999, borderColor: '#ccc', borderWidth: 1, justifyContent: 'center' }}>
-                    <Text style={{ textAlign: 'center', fontSize: 17 }}>M</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => console.log('mau sac')}
-                >
-                  <View style={{ width: 50, height: 40, backgroundColor: '#fff', borderRadius: 999, borderColor: '#ccc', borderWidth: 1, justifyContent: 'center' }}>
-                    <Text style={{ textAlign: 'center', fontSize: 17 }}>L</Text>
-                  </View>
-                </TouchableWithoutFeedback>
+
+              {/* Kích thước */}
+              <Text style={{ marginBottom: 10 }}>Kích thước</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                {availableSizes.map((size) => (
+                  <TouchableWithoutFeedback key={size.name} onPress={() => handleSizeSelect(size)}>
+                    <View
+                      style={{
+                        width: 50,
+                        height: 40,
+                        borderRadius: 5,
+                        borderColor: selectedSize === size.name ? 'red' : '#ccc',
+                        borderWidth: 2,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#fff',
+                      }}
+                    >
+                      <Text>{size.name}</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                ))}
               </View>
+
             </View>
             <LineWithoutTitle />
-            <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'space-between' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <Text style={{ padding: 10 }}>Số lượng</Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
                 <TouchableWithoutFeedback onPress={() => console.log('tru')}>
@@ -220,7 +266,7 @@ const DetailProduct = ({ navigation }) => {
                 </TouchableWithoutFeedback>
               </View>
             </View>
-            <View style={{flex:1,justifyContent:'center', alignItems:'center', padding:10 }}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10 }}>
               <Button title='Mua ngay' width='100%' height={40} onPress={handleBuy} />
             </View>
 

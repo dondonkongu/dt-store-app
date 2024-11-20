@@ -10,7 +10,7 @@ const Card = ({ data }) => {
 
     
   return (
-    <TouchableWithoutFeedback style={{ width: 140, height: 250 }} onPress={()=>nav.navigate('DetailProduct',{idProduct:data.id})}>
+    <TouchableWithoutFeedback style={{ width: 140, height: 250 }} onPress={()=>nav.navigate('DetailProduct',{idProduct:data.id,imageUrl:imageUrl})}>
       <View style={{ width: 140, height: 250 }}>
         <Image 
           source={{ uri: imageUrl}}
