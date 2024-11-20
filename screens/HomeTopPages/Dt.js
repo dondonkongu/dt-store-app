@@ -1,10 +1,11 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SwipperCategories from '../../components/SwipperCategories'
 import SwipperBanner from '../../components/SwipperBanner';
 import ProductSection from '../../components/ProductSection';
 import ProductList from '../../components/ProductList';
 import Collection from '../../components/Collection';
+import BASE_URL from '../../api';
 
 
 
@@ -28,46 +29,22 @@ const imgBanner =[
   ,{id:3,link:'https://media-fmplus.cdn.vccloud.vn/uploads/sliders/1ef014db-3c0e-4f6a-bd37-9af9ed13d834.jpg'}    
 ];
 
-const products = [
-  {
-    id: 1,
-    name: "váy đầm nữ chữ a cổ trụ tròn tay hến thắt dây eo",
-    price: 149000,
-    url: "https://media.fmplus.com.vn/uploads/products/2410AIUD4270101/2d8df0b6-3418-42a2-bcd5-186d5dad9870.jpeg"
-  },
-  {
-    id: 2,
-    name: "Quần Jeans",
-    price: 299000,
-    url: "https://media.fmplus.com.vn/uploads/products/2410AIUD4270101/2d8df0b6-3418-42a2-bcd5-186d5dad9870.jpeg"
-  },
-  {
-    id: 3,
-    name: "Giày Thể Thao",
-    price: 499000,
-    url: "https://media.fmplus.com.vn/uploads/products/2410AIUD4270101/2d8df0b6-3418-42a2-bcd5-186d5dad9870.jpeg"
-  },
-  {
-    id: 4,
-    name: "Balo Thời Trang",
-    price: 199000,
-    url: "https://media.fmplus.com.vn/uploads/products/2410AIUD4270101/2d8df0b6-3418-42a2-bcd5-186d5dad9870.jpeg"
-  },
-  {
-    id: 5,
-    name: "Nón Lưỡi Trai",
-    price: 99000,
-    url: "https://media.fmplus.com.vn/uploads/products/2410AIUD4270101/2d8df0b6-3418-42a2-bcd5-186d5dad9870.jpeg"
-  },
-  {
-    id: 6,
-    name: "Áo Khoác Nam",
-    price: 350000,
-    url: "https://media.fmplus.com.vn/uploads/products/2410AIUD4270101/2d8df0b6-3418-42a2-bcd5-186d5dad9870.jpeg"
-  }
-];
+
 
 const Dt = () => {
+  const [products,setProducts] = useState([])
+
+const fetchProducts = async()=>{
+  try{
+    const response = await BASE_URL.get('/dt-store/products')
+    setProducts(response.data.result)
+  }catch(err){
+    console.log(err);
+  }
+}
+useEffect(()=>{
+  fetchProducts()
+},[])
   
   return (
     <ScrollView  style={{ backgroundColor:'#dadada',flex:1 }}>

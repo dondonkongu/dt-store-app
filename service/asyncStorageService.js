@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 export const KEY_TOKEN = 'accessToken'
+export const KEY_USER = 'user'
 
 export const storedToken = async (token) => {
     try {
@@ -23,6 +24,16 @@ export const getToken = async () => {
 export const removeToken = async () => {
     try {
         await AsyncStorage.removeItem(KEY_TOKEN)
+        await AsyncStorage.removeItem(KEY_USER)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getUserDetail = async () => {
+    try {
+        const userDetail = await AsyncStorage.getItem(KEY_USER)
+        return userDetail
     } catch (error) {
         console.log(error)
     }

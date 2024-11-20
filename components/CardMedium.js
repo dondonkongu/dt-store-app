@@ -2,10 +2,13 @@ import { StyleSheet, Text, TouchableOpacity, View,Image } from 'react-native'
 import React from 'react'
 
 const CardMedium = ({data}) => {
+
+    const mainImage = data.images?.find((image) => image.isMain);
+    const imageUrl = mainImage ? mainImage.url : null;
   return (
     <View style={{ width: 205, height: 310, justifyContent:'center', alignItems:'center', paddingTop:10}}>
         <View >
-            <Image source={{ uri:data.url }}
+            <Image source={{ uri:imageUrl }}
             style={{ width: 205, height: 250 }} resizeMode='contain'
             />  
             <Text style={styles.textPrice}>{data.price.toLocaleString('vi-VN')} VND</Text>

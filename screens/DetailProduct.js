@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableWithoutFeedback, Modal } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MAINCOLOR } from '../constants/color'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SwipperDetailProduct from '../components/SwipperDetailProduct';
@@ -7,6 +7,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SizeChart from '../components/SizeChart';
 import Button from '../components/Button';
 import LineWithoutTitle from '../components/LineWithoutTitle';
+import { useRoute } from '@react-navigation/native';
+import BASE_URL from '../api';
 
 
 
@@ -18,8 +20,36 @@ const img = [
 
 ]
 const DetailProduct = ({ navigation }) => {
+  
+  const route = useRoute();
+  const { idProduct } = route.params;
+  console.log(idProduct);
+  
+  
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [product, setProduct] = useState({});
+  const [imageUrls, setImageUrls] = useState([]);
+
+  const fetchProduct = async ()=>{
+    try{
+      const response = await BASE_URL.get(`/dt-store/products/${idProduct}`)
+      console.log(response.data);
+      
+      setProduct(response.data.result)
+      setImageUrls(response.data.result.images)
+      console.log(response.data?.result);
+      
+      
+    }catch(err){
+      console.log(err);
+  }
+}
+
+  useEffect(()=>{
+    fetchProduct()
+  },[])
+  
 
   const handleBuy = () => {
     setIsModalVisible(false)
@@ -33,18 +63,22 @@ const DetailProduct = ({ navigation }) => {
         <Ionicons name='cart-outline' size={26} color='#fff' />
       </View>
       <ScrollView style={styles.content}>
-        <SwipperDetailProduct />
+        <SwipperDetailProduct img={imageUrls}/>
         <View style={{ paddingHorizontal: 10, borderBottomWidth: 1, borderColor: "#ccc", backgroundColor: '#fff' }}>
-          <View style={styles.nameProduct}>
-            <Text style={{ fontSize: 17, fontWeight: 600, width: '95%' }} numberOfLines={1}>ten san phammm</Text>
+          <View style={[styles.nameProduct,{marginVertical:10}]}>
+            <Text style={{ fontSize: 17, fontWeight: 600, width: '95%' }} numberOfLines={1}>{product.name}</Text>
             <Ionicons name='heart-outline' size={23} color='black' />
           </View>
           <View style={styles.nameProduct}>
-            <Text style={{ color: 'red', fontSize: 17 }}>369.000 vnd</Text>
+            <Text style={{ color: 'red', fontSize: 17 }}>{product.price.toLocaleString('vi-VN')} VND</Text>
             <View style={styles.nameProduct}>
-              <Text>da ban :114</Text>
+              <Text>Đã bán :{product.images
+                  .flatMap((image) => image.sizes)
+                  .reduce((total, size) => total + size.sold, 0)}</Text>
               <View style={{ width: 1, backgroundColor: '#ccc', height: 13, marginHorizontal: 5 }}></View>
-              <Text>con lai : 100</Text>
+              <Text>Còn lại : {product.images
+                  .flatMap((image) => image.sizes)
+                  .reduce((total, size) => total + size.quantity, 0)}</Text>
             </View>
           </View>
           <View style={{ flex: 1, height: 1, backgroundColor: '#ccc', }}></View>
@@ -66,11 +100,11 @@ const DetailProduct = ({ navigation }) => {
         <View style={styles.detailProduct}>
           <View style={{ paddingVertical: 10 }}>
             <Text style={{ fontSize: 17, fontWeight: 600, paddingBottom: 5 }}>CHI TIẾT SẢN PHẨM</Text>
-            <Text style={{ fontSize: 14 }}>-Tên sản phẩm: </Text>
-            <Text style={{ fontSize: 14 }}>-Chất liệu: </Text>
-            <Text style={{ fontSize: 14 }}>-Màu sắc: </Text>
-            <Text style={{ fontSize: 14 }}>-Họa tiết: </Text>
-            <Text style={{ fontSize: 14 }}>-Xuất xứ: </Text>
+            <Text style={{ fontSize: 14 }}>-Tên sản phẩm: {product.name}</Text>
+            <Text style={{ fontSize: 14 }}>-Chất liệu: {product.material} </Text>
+            <Text style={{ fontSize: 14 }}>-Màu sắc: {product.images.map(image => image.color).join('/')}</Text>
+            <Text style={{ fontSize: 14 }}>-Họa tiết: {[...new Set(product.images.flatMap(image => image.sizes.map(size => size.name)))].join(' / ')}</Text>
+            <Text style={{ fontSize: 14 }}>-Xuất xứ: {product.origin}</Text>
           </View>
           <View style={{ paddingVertical: 10 }}>
             <Text style={{ fontSize: 17, fontWeight: 600 }}>HƯỚNG DẪN CHỌN SIZE</Text>

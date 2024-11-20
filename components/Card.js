@@ -4,11 +4,16 @@ import { useNavigation } from '@react-navigation/native';
 
 const Card = ({ data }) => {
     const nav = useNavigation();
+    
+    const mainImage = data.images?.find((image) => image.isMain);
+    const imageUrl = mainImage ? mainImage.url : null;
+
+    
   return (
-    <TouchableWithoutFeedback style={{ width: 140, height: 250 }} onPress={()=>nav.navigate('DetailProduct')}>
+    <TouchableWithoutFeedback style={{ width: 140, height: 250 }} onPress={()=>nav.navigate('DetailProduct',{idProduct:data.id})}>
       <View style={{ width: 140, height: 250 }}>
         <Image 
-          source={{ uri: data.url }}
+          source={{ uri: imageUrl}}
           style={{ width: 140, height: 200 }} 
           resizeMode='contain'
         />  

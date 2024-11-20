@@ -19,8 +19,6 @@ const HomeScreen = ({navigation}) => {
           <TouchableWithoutFeedback onPress={()=>navigation.navigate('Search')}>
           <View style={styles.inputSearch} >
             <Ionicons name='search' size={24} color='#000' />
-            {/* <TextInput style={styles.searchText}
-              placeholder='Tìm kiếm' /> */}
           </View>
           </TouchableWithoutFeedback>
           <View style={styles.icon}>

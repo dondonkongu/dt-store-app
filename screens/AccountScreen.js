@@ -9,6 +9,7 @@ import { getToken } from '../service/asyncStorageService';
 import { useState } from 'react';
 import BASE_URL from '../api';
 import MenuItem from '../components/MenuItem';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AccountScreen = () => {
   const nav = useNavigation();
@@ -24,7 +25,8 @@ const AccountScreen = () => {
           }
       });
       setUser(response.data.result);
-      console.log(response.data.result);
+      await AsyncStorage.setItem('user', JSON.stringify(response.data.result));
+      console.log('User data saved to AsyncStorage:', response.data.result);
   } catch (error) {
     console.error("Error fetching data: ", error.response ? error.response.data : error.message);
   }
