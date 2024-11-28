@@ -37,11 +37,12 @@ const Dt = () => {
 const fetchProducts = async()=>{
   try{
     const response = await BASE_URL.get('/dt-store/products')
-    setProducts(response.data.result)
+    setProducts(response.data.result.data)
   }catch(err){
     console.log(err);
   }
 }
+
 useEffect(()=>{
   fetchProducts()
 },[])
@@ -54,9 +55,9 @@ useEffect(()=>{
       <View style={{ height:217 }}>
         <SwipperCategories data={categories}/>
       </View>
-      <View style={ styles.componentContainer}>
+      {/* <View style={ styles.componentContainer}>
         <Collection/>
-      </View>
+      </View> */}
        <View style={ styles.componentContainer} >
         <ProductSection title='Sản phẩm mới' products={products}/>
        </View>

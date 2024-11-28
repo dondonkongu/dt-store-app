@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableWithoutFeedback, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import LineWithoutTitle from '../components/LineWithoutTitle'
+import Button from '../components/Button'
 import { MAINCOLOR } from '../constants/color'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SwipperDetailProduct from '../components/SwipperDetailProduct';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SizeChart from '../components/SizeChart';
-import Button from '../components/Button';
-import LineWithoutTitle from '../components/LineWithoutTitle';
 import { useRoute } from '@react-navigation/native';
 import BASE_URL from '../api';
 
@@ -27,17 +27,35 @@ const DetailProduct = ({ navigation }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [solded, setSolded] = useState(0);
   const [remain, setRemain] = useState(0)
-  const [selectedColor, setSelectedColor] = useState(null); // Màu sắc được chọn
-  const [availableSizes, setAvailableSizes] = useState([]); // Các kích thước theo màu
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [availableSizes, setAvailableSizes] = useState([]);
+
+  const [variants, setVariants] = useState([]);
+
+  const fetchVariants = async () => {
+    try {
+      const response = await BASE_URL.get(`/dt-store/variants/product/${idProduct}`)
+      console.log(response.data.result);
+
+      setVariants(response.data.result)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    fetchVariants()
+  }, [])
 
 
   const handleColorSelect = (color) => {
     setSelectedColor(color);
-    const selectedImage = product.images.find((image) => image.color === color);
-    setAvailableSizes(selectedImage?.sizes || []);
-    setSelectedSize(null); // Reset kích thước đã chọn
-    setSolded(0); // Reset số lượng đã bán
-    setRemain(0); // Reset số lượng còn lại
+    const filteredVariants = variants.filter((variant) => variant.color === color);
+    const availableSizes = filteredVariants.map((variant) => variant.size);
+    setAvailableSizes(availableSizes.length > 0 ? availableSizes : []);
+    setSelectedSize(null);
+    setSolded(0);
+    setRemain(0);
   };
 
 
@@ -59,13 +77,10 @@ const DetailProduct = ({ navigation }) => {
       console.log(err);
     }
   }
-  const sold = product?.images
-    ?.flatMap((image) => image.sizes)
-    ?.reduce((total, size) => total + size.sold, 0) ?? 0
+  const sold = 0
 
-  const remaining = product?.images
-    ?.flatMap((image) => image.sizes)
-    ?.reduce((total, size) => total + size.quantity, 0) ?? 0
+
+  const remaining = variants.reduce((total, variant) => total + variant.stock, 0);
 
   useEffect(() => {
     fetchProduct()
@@ -128,13 +143,12 @@ const DetailProduct = ({ navigation }) => {
             <Text style={{ fontSize: 14 }}>-Tên sản phẩm: {product?.name ?? 'Không có thông tin'}</Text>
             <Text style={{ fontSize: 14 }}>-Chất liệu: {product?.material ?? 'Không có thông tin'}</Text>
             <Text style={{ fontSize: 14 }}>
-              -Màu sắc: {product?.images?.map(image => image.color).join('/') ?? 'Không có thông tin'}
+              -Màu sắc: {[...new Set(variants.map((variant) => variant.color))].join('/') || 'Không có thông tin'}
             </Text>
             <Text style={{ fontSize: 14 }}>
               -Kích cỡ :
-              {product?.images
-                ? [...new Set(product.images.flatMap(image => image.sizes.map(size => size.name)))].join(' / ')
-                : 'Không có thông tin'}
+              {[...new Set(variants.map((variant) => variant.size))].join('/') || 'Không có thông tin'}
+
             </Text>
             <Text style={{ fontSize: 14 }}>-Xuất xứ: {product?.origin ?? 'Không có thông tin'}</Text>
           </View>
@@ -172,11 +186,6 @@ const DetailProduct = ({ navigation }) => {
         </View>
       </View>
 
-
-
-
-      {/* modal do toi code chua hoan thanh */}
-
       <Modal visible={isModalVisible} transparent={true} animationType='slide'>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end', alignItems: 'center' }}>
           <View style={{ backgroundColor: '#fff', width: '100%', height: 450, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
@@ -188,13 +197,11 @@ const DetailProduct = ({ navigation }) => {
               <View style={styles.infoProduct}>
                 <Text style={{ fontSize: 17, fontWeight: '600' }} numberOfLines={1}>{product.name}</Text>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Text>da ban :{solded}</Text>
+                  <Text>da ban :{sold}</Text>
                   <View style={{ width: 1, backgroundColor: '#ccc', height: 13, marginHorizontal: 5 }}></View>
                   <Text>con lai : {remain}</Text>
                 </View>
-                <Text style={{ marginTop: 20, color: 'red', fontSize: 15 }}>{product?.price !== undefined
-                  ? `${product.price.toLocaleString('vi-VN')} VND`
-                  : 'not available'}</Text>
+                <Text style={{ marginTop: 20, color: 'red', fontSize: 15 }}>299.000 vnd</Text>
               </View>
               <View>
                 <TouchableWithoutFeedback onPress={() => setIsModalVisible(false)} style={{ position: 'absolute', top: 0, right: 0 }}>
@@ -206,18 +213,17 @@ const DetailProduct = ({ navigation }) => {
             </View>
             <View style={{ height: 1, backgroundColor: '#ccc', }}></View>
             <View style={{ padding: 10 }}>
-              {/* Màu sắc */}
               <Text style={{ marginBottom: 10 }}>Màu sắc</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-                {product?.images?.map((image) => (
-                  <TouchableWithoutFeedback key={image.color} onPress={() => handleColorSelect(image.color)}>
-                    <Image
-                      source={{ uri: image.url }}
+                {variants?.map((variant) => (
+                  <TouchableWithoutFeedback key={variant.id} onPress={() => handleColorSelect(variant.color)}>
+                    <View
                       style={{
                         width: 40,
                         height: 40,
                         borderRadius: 999,
-                        borderColor: selectedColor === image.color ? 'red' : '#ccc',
+                        backgroundColor: variant.color, 
+                        borderColor: selectedColor === variant.color ? 'red' : '#ccc', 
                         borderWidth: 1,
                       }}
                     />
@@ -225,7 +231,6 @@ const DetailProduct = ({ navigation }) => {
                 ))}
               </View>
 
-              {/* Kích thước */}
               <Text style={{ marginBottom: 10 }}>Kích thước</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                 {availableSizes.map((size) => (
@@ -269,15 +274,9 @@ const DetailProduct = ({ navigation }) => {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10 }}>
               <Button title='Mua ngay' width='100%' height={40} onPress={handleBuy} />
             </View>
-
           </View>
         </View>
       </Modal>
-
-
-
-
-
 
 
     </SafeAreaView>

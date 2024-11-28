@@ -6,9 +6,6 @@ import TopTabs from '../TabNavigations/TopTabs';
 
 
 
-
-
-
 const HomeScreen = ({navigation}) => {
 
 
@@ -30,8 +27,6 @@ const HomeScreen = ({navigation}) => {
       <View style={{ flex:1, }}>
         <TopTabs />
         
-
-
       </View>
       
 
