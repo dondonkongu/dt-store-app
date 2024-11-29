@@ -1,11 +1,28 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CardMedium from './CardMedium';
+import { useEffect, useState } from 'react';
+import BASE_URL from '../api';
 
 
-const ProductList = ({ title, products }) => {
-    const data = products.slice(0, 6)
+const ProductList = ({ title }) => {
+
+        const [products,setProducts] = useState([])
+      
+        const fetchProducts = async()=>{
+          try{
+            const response = await BASE_URL.get('/dt-store/products/sort/totalSold?page=1&size=6')
+            setProducts(response.data.result.data)
+          }catch(err){
+            console.log(err);
+          }
+        }
+        
+        useEffect(()=>{
+          fetchProducts()
+        },[])
+
     return (
         <View style={{ backgroundColor:'#fff',paddingHorizontal:5 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between'  }}>
@@ -16,7 +33,7 @@ const ProductList = ({ title, products }) => {
                 </View>
             </View>
             <View>
-            {data.map((item, index) => {
+            {products.map((item, index) => {
                     if (index % 2 === 0) {
                         return (
                             <View 
@@ -24,7 +41,7 @@ const ProductList = ({ title, products }) => {
                                 style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10}}
                             >
                                 <CardMedium data={item} />                               
-                                {data[index + 1] && <CardMedium data={data[index + 1]} />}
+                                {products[index + 1] && <CardMedium data={products[index + 1]} />}
                             </View>
                         );
                     }

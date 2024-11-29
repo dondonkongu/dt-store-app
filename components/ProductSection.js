@@ -2,9 +2,26 @@ import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Card from './Card'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useEffect, useState } from 'react';
+import BASE_URL from '../api';
 
 
-const ProductSection = ({ title, products }) => {
+const ProductSection = ({ title }) => {
+  const [products,setProducts] = useState([])
+
+  const fetchProducts = async()=>{
+    try{
+      const response = await BASE_URL.get('/dt-store/products/sort/createdDate?page=1&size=6')
+      setProducts(response.data.result.data)
+    }catch(err){
+      console.log(err);
+    }
+  }
+  
+  useEffect(()=>{
+    fetchProducts()
+  },[])
+
   return (
     <View style={{ backgroundColor:'#fff',paddingHorizontal:5 }} >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

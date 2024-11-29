@@ -5,7 +5,6 @@ import SwipperBanner from '../../components/SwipperBanner';
 import ProductSection from '../../components/ProductSection';
 import ProductList from '../../components/ProductList';
 import Collection from '../../components/Collection';
-import BASE_URL from '../../api';
 
 
 
@@ -32,20 +31,6 @@ const imgBanner =[
 
 
 const Dt = () => {
-  const [products,setProducts] = useState([])
-
-const fetchProducts = async()=>{
-  try{
-    const response = await BASE_URL.get('/dt-store/products')
-    setProducts(response.data.result.data)
-  }catch(err){
-    console.log(err);
-  }
-}
-
-useEffect(()=>{
-  fetchProducts()
-},[])
   
   return (
     <ScrollView  style={{ backgroundColor:'#dadada',flex:1 }}>
@@ -55,14 +40,14 @@ useEffect(()=>{
       <View style={{ height:217 }}>
         <SwipperCategories data={categories}/>
       </View>
-      {/* <View style={ styles.componentContainer}>
+      <View style={ styles.componentContainer}>
         <Collection/>
-      </View> */}
+      </View>
        <View style={ styles.componentContainer} >
-        <ProductSection title='Sản phẩm mới' products={products}/>
+        <ProductSection title='Sản phẩm mới'/>
        </View>
        <View style={ styles.componentContainer}>
-        <ProductList title='Sản phẩm bán chạy' products={products}/>
+        <ProductList title='Sản phẩm bán chạy' />
        </View>
     </ScrollView>
   )

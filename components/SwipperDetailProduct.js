@@ -1,49 +1,39 @@
-import { StyleSheet, Text, View, Image, Dimensions} from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity} from 'react-native'
 import React from 'react'
 import Swiper from 'react-native-swiper'
 const { width } = Dimensions.get('window')
 
 
 const SwipperDetailProduct = ({img}) => {
-  
-  
 
-    const renderPagination = (index, total, context) => {
-
-        return (
-          <View style={styles.paginationStyle}>
-            <Text style={{ color: 'black' }}>
-              <Text style={styles.paginationText}>{index + 1}</Text>/{total}
-            </Text>
-          </View>
-        )
-      }
+  const renderPagination = (index,total) => {
+    return (
+      <View style={styles.paginationStyle}>
+        <Text style={{ color: 'grey' }}>
+          <Text style={styles.paginationText}>{total}</Text>
+        </Text>
+      </View>
+    )
+  }
 
     return (
-        <Swiper
-        style={styles.wrapper}
-        renderPagination={renderPagination}
-        loop={false}
-        showsButtons={true}
-        nextButton={<Text style={{ color: 'white',fontSize:50, }}>›</Text>}
-        prevButton={<Text style={{ color: 'white',fontSize:50, }}>‹</Text>}
-      >{img.map((item,index)=>{
-        return(
-            <View
-            key={index}
-            style={styles.slide}
-           
-          >
-            <Image style={styles.image} source={{ uri:item.url }} />
-          </View>
-        )
-        }
-    )}
-
-        
-      
+      <Swiper
+      style={styles.wrapper}
+      renderPagination={renderPagination}
+      loop={false}
+  
+>
+        {img.map((item, index) => (
+        <View style={styles.slide} key={item.id}>
+          <Image
+            style={styles.image}
+            source={{ uri: item.url }}
+            resizeMode="cover"
+          />
+        </View>
+      ))}
        
-      </Swiper>
+    </Swiper>
     )
 }
 

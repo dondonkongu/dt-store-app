@@ -18,7 +18,7 @@ const Card = ({ data }) => {
           style={{ width: 140, height: 200 }} 
           resizeMode='contain'
         />  
-        <Text style={styles.textPrice}>299.000 VND</Text>
+        <Text style={styles.textPrice}>{data.price.toLocaleString('vi-VN')} VND</Text>
         <Text style={styles.textName} numberOfLines={1}>{data.name}</Text>
       </View>
     </TouchableWithoutFeedback>

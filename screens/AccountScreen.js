@@ -35,8 +35,13 @@ const AccountScreen = () => {
   useEffect(() => {
     const fetchUserData = async () => {
         const accessToken = await getToken(); 
+        console.log('Access token: ', accessToken);
+        
         if (accessToken) {
             await getUserDetail(accessToken);
+        }
+        else {
+            console.log('No access token found');
         }
     };
 

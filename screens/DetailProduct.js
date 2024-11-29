@@ -16,7 +16,6 @@ const DetailProduct = ({ navigation }) => {
   const route = useRoute();
   const { idProduct } = route.params;
   const { imageUrl } = route.params;
-  console.log(idProduct);
 
 
 
@@ -25,8 +24,13 @@ const DetailProduct = ({ navigation }) => {
   const [imageUrls, setImageUrls] = useState([]);
 
   const [selectedSize, setSelectedSize] = useState(null);
-  const [solded, setSolded] = useState(0);
-  const [remain, setRemain] = useState(0)
+
+  const [totalSold, setTotalSold] = useState('');
+  const [totalRemain, setTotalRemain] = useState('')
+
+
+  const [solded, setSolded] = useState('');
+  const [remain, setRemain] = useState('')
   const [selectedColor, setSelectedColor] = useState(null);
   const [availableSizes, setAvailableSizes] = useState([]);
 
@@ -35,23 +39,41 @@ const DetailProduct = ({ navigation }) => {
   const fetchVariants = async () => {
     try {
       const response = await BASE_URL.get(`/dt-store/variants/product/${idProduct}`)
-      console.log(response.data.result);
-
       setVariants(response.data.result)
+     
     } catch (err) {
       console.log(err);
     }
   }
 
   useEffect(() => {
+    fetchProduct()
     fetchVariants()
-  }, [])
+    
+  }, []);
+
+  useEffect(() => {
+    if (variants.length > 0) {
+      const sold = variants.reduce((total, variant) => total + variant.sold, 0);
+    const remaining = variants.reduce((total, variant) => total + variant.stock, 0);
+    console.log(sold);
+    setSolded(sold);
+    setRemain(remaining - sold);
+
+    setTotalSold(sold);
+    setTotalRemain(remaining);
+
+    }
+  }, [variants]);
 
 
   const handleColorSelect = (color) => {
+    console.log(color);
+    
     setSelectedColor(color);
-    const filteredVariants = variants.filter((variant) => variant.color === color);
-    const availableSizes = filteredVariants.map((variant) => variant.size);
+    const availableSizes = variants.filter((variant) => variant.color === color);
+    console.log(availableSizes);
+    
     setAvailableSizes(availableSizes.length > 0 ? availableSizes : []);
     setSelectedSize(null);
     setSolded(0);
@@ -59,10 +81,10 @@ const DetailProduct = ({ navigation }) => {
   };
 
 
-  const handleSizeSelect = (size) => {
-    setSelectedSize(size.name);
-    setSolded(size.sold);
-    setRemain(size.quantity - size.sold);
+  const handleSizeSelect = (item) => {
+    setSelectedSize(item.size);
+    setSolded(item.sold);
+    setRemain(item.stock - item.sold);
   };
 
 
@@ -72,19 +94,15 @@ const DetailProduct = ({ navigation }) => {
       const response = await BASE_URL.get(`/dt-store/products/${idProduct}`)
       setProduct(response.data.result)
       setImageUrls(response.data.result.images)
-
     } catch (err) {
       console.log(err);
     }
   }
-  const sold = 0
+  
 
+  const uniqueColors = [...new Set(variants.map((variant) => variant.color))];
 
-  const remaining = variants.reduce((total, variant) => total + variant.stock, 0);
-
-  useEffect(() => {
-    fetchProduct()
-  }, [])
+ 
 
 
   const handleBuy = () => {
@@ -113,11 +131,11 @@ const DetailProduct = ({ navigation }) => {
             </Text>
             <View style={styles.nameProduct}>
               <Text>
-                Đã bán : {sold}
+                Đã bán : {totalSold}
               </Text>
               <View style={{ width: 1, backgroundColor: '#ccc', height: 13, marginHorizontal: 5 }}></View>
               <Text>
-                Còn lại : {remaining}
+                Còn lại : {totalRemain}
               </Text>
             </View>
           </View>
@@ -143,11 +161,10 @@ const DetailProduct = ({ navigation }) => {
             <Text style={{ fontSize: 14 }}>-Tên sản phẩm: {product?.name ?? 'Không có thông tin'}</Text>
             <Text style={{ fontSize: 14 }}>-Chất liệu: {product?.material ?? 'Không có thông tin'}</Text>
             <Text style={{ fontSize: 14 }}>
-              -Màu sắc: {[...new Set(variants.map((variant) => variant.color))].join('/') || 'Không có thông tin'}
+              -Màu sắc: {uniqueColors.join(' | ') || 'Không có thông tin'}
             </Text>
             <Text style={{ fontSize: 14 }}>
-              -Kích cỡ :
-              {[...new Set(variants.map((variant) => variant.size))].join('/') || 'Không có thông tin'}
+              -Kích cỡ : {[...new Set(variants.map((variant) => variant.size))].join('/') || 'Không có thông tin'}
 
             </Text>
             <Text style={{ fontSize: 14 }}>-Xuất xứ: {product?.origin ?? 'Không có thông tin'}</Text>
@@ -197,11 +214,14 @@ const DetailProduct = ({ navigation }) => {
               <View style={styles.infoProduct}>
                 <Text style={{ fontSize: 17, fontWeight: '600' }} numberOfLines={1}>{product.name}</Text>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Text>da ban :{sold}</Text>
+                  <Text>da ban :{solded}</Text>
                   <View style={{ width: 1, backgroundColor: '#ccc', height: 13, marginHorizontal: 5 }}></View>
                   <Text>con lai : {remain}</Text>
                 </View>
-                <Text style={{ marginTop: 20, color: 'red', fontSize: 15 }}>299.000 vnd</Text>
+                <Text style={{ marginTop: 20, color: 'red', fontSize: 15 }}>
+                  {product?.price !== undefined
+                    ? `${product.price.toLocaleString('vi-VN')} VND`
+                    : 'Price not available'}</Text>
               </View>
               <View>
                 <TouchableWithoutFeedback onPress={() => setIsModalVisible(false)} style={{ position: 'absolute', top: 0, right: 0 }}>
@@ -215,39 +235,37 @@ const DetailProduct = ({ navigation }) => {
             <View style={{ padding: 10 }}>
               <Text style={{ marginBottom: 10 }}>Màu sắc</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-                {variants?.map((variant) => (
-                  <TouchableWithoutFeedback key={variant.id} onPress={() => handleColorSelect(variant.color)}>
+                {uniqueColors.map((item,index) => (
+                  <TouchableWithoutFeedback key={index} onPress={() => handleColorSelect(item)}>
                     <View
                       style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 999,
-                        backgroundColor: variant.color, 
-                        borderColor: selectedColor === variant.color ? 'red' : '#ccc', 
+                        borderColor: selectedColor === item ? 'red' : '#ccc',
                         borderWidth: 1,
-                      }}
-                    />
+                      }}>
+                      <Text style={{ padding:5 }}>{item}</Text>
+                    </View>
+
                   </TouchableWithoutFeedback>
                 ))}
               </View>
 
               <Text style={{ marginBottom: 10 }}>Kích thước</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                {availableSizes.map((size) => (
-                  <TouchableWithoutFeedback key={size.name} onPress={() => handleSizeSelect(size)}>
+                {availableSizes.map((item, index) => (
+                  <TouchableWithoutFeedback key={index} onPress={() => handleSizeSelect(item)}>
                     <View
                       style={{
                         width: 50,
                         height: 40,
                         borderRadius: 5,
-                        borderColor: selectedSize === size.name ? 'red' : '#ccc',
+                        borderColor: selectedSize === item.size ? 'red' : '#ccc',
                         borderWidth: 2,
                         justifyContent: 'center',
                         alignItems: 'center',
                         backgroundColor: '#fff',
                       }}
                     >
-                      <Text>{size.name}</Text>
+                      <Text>{item.size}</Text>
                     </View>
                   </TouchableWithoutFeedback>
                 ))}
