@@ -9,11 +9,16 @@ import BASE_URL from '../api';
 
 const Register = ({ navigation }) => {
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [dob, setDob] = useState('');
+ const [data, setData] = useState({
+
+    username: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    address: '',
+    dob: '',
+  });
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -21,17 +26,19 @@ const Register = ({ navigation }) => {
     setShowPassword(!showPassword);
   }
 
-  const handleLoginWithFacebook = () => {
-    console.log('login with facebook');
+  // const handleLoginWithFacebook = () => {
+  //   console.log('login with facebook');
 
 
-  }
-  const handleLoginWithGoogle = () => {
-    console.log('login with google');
+  // }
+  // const handleLoginWithGoogle = () => {
+  //   console.log('login with google');
 
-  }
+  // }
   const handleRegister = () => {
-      BASE_URL.post('identity/users/registration', {username,password,firstName,lastName,dob})
+    console.log(data);
+    
+      BASE_URL.post('identity/users/registration', data)
       .then((response) => {
         console.log(response.data);
         Alert.alert('Thông báo', 'Đăng kí thành công', [
@@ -72,8 +79,8 @@ const Register = ({ navigation }) => {
               color='black'
             />
             <TextInput placeholder='username'
-              value={username}
-              onChangeText={(text) => setUsername(text)}
+              value={data.username}
+              onChangeText={(text) =>setData({ ...data, username: text })}
               style={styles.textInput}
             />
           </View>
@@ -84,8 +91,8 @@ const Register = ({ navigation }) => {
               color='black'
             />
             <TextInput placeholder='password'
-              value={password}
-              onChangeText={(text) => setPassword(text)}
+              value={data.password}
+              onChangeText={(text) =>setData({ ...data, password: text })}
               style={styles.textInput}
               secureTextEntry={!showPassword}
             />
@@ -104,8 +111,8 @@ const Register = ({ navigation }) => {
               color='black'
             />
             <TextInput placeholder='First Name'
-              value={firstName}
-              onChangeText={(text) => setFirstName(text)}
+              value={data.firstName}
+              onChangeText={(text) =>setData({ ...data, firstName: text })}
               style={styles.textInput}
             />
           </View>
@@ -116,18 +123,44 @@ const Register = ({ navigation }) => {
               color='black'
             />
             <TextInput placeholder='Last Name'
-            value={lastName}
-            onChangeText={(text) => setLastName(text)}
-              style={styles.textInput}
+            value={data.lastName}
+            onChangeText={(text) =>setData({ ...data, lastName: text })}
+            style={styles.textInput}
             />
           </View>
           <View style={styles.viewInput}>
             <Ionicons
-              name='person-outline'
+              name='phone-portrait-outline'
+              size={24}
+              color='black'
+            />
+            <TextInput placeholder='Phone number'
+            value={data.phoneNumber}
+            onChangeText={(text) =>setData({ ...data, phoneNumber: text })}
+            style={styles.textInput}
+            />
+          </View>
+          <View style={styles.viewInput}>
+            <Ionicons
+              name='location-outline'
+              size={24}
+              color='black'
+            />
+            <TextInput placeholder='address'
+            value={data.address}
+            onChangeText={(text) =>setData({ ...data, address: text })}
+            style={styles.textInput}
+            />
+          </View>
+          <View style={styles.viewInput}>
+            <Ionicons
+              name='calendar-outline'
               size={24}
               color='black'
             />
             <TextInput placeholder='Date of Birth'
+            value={data.dob}
+            onChangeText={(text) =>setData({ ...data, dob: text })}
               style={styles.textInput}
             />
           </View>
@@ -135,7 +168,7 @@ const Register = ({ navigation }) => {
           <View style={styles.buttonContainer}>
             <Button title='Đăng Ký' width='100%' height={50} onPress={handleRegister} />
           </View>
-          <View style={[styles.buttonContainer, { marginTop: 10 }]}>
+          {/* <View style={[styles.buttonContainer, { marginTop: 10 }]}>
             <Line title='HOẶC ĐĂNG KÍ BẰNG' />
             <View style={{ flexDirection: 'row' }}>
               <Ionicons
@@ -151,7 +184,7 @@ const Register = ({ navigation }) => {
                 color={'#db4437'}
               />
             </View>
-          </View>
+          </View> */}
         </View>
 
       </View>

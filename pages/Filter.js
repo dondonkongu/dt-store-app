@@ -18,94 +18,81 @@ const Filter = ({ navigation }) => {
   const filterHeight = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
-    fetchFilters();
+    fetchCategories();
+    fetchVariants();
   }, []);
 
-  const fetchFilters = async () => {
+  const fetchCategories = async () => {
     try {
-      const response = await BASE_URL.get('/dt-store/products');
+      const response = await BASE_URL.get('/dt-store/categories');
       const data = response.data.result;
-      setProducts(data);
-      const categorySet = new Set();
-      const colorSet = new Set();
-      const sizeSet = new Set();
-
-      data.forEach(product => {
-        if (product.category && product.category.name) {
-          categorySet.add(product.category.name);
-        }
-        product.images.forEach(image => {
-          if (image.color) {
-            colorSet.add(image.color);
-          }
-          image.sizes.forEach(size => {
-            if (size.name) {
-              sizeSet.add(size.name);
-            }
-          });
-        });
-      });
-
-      setCategories(Array.from(categorySet));
-      setColors(Array.from(colorSet));
-      setSizes(Array.from(sizeSet));
+      setCategories(data);
     } catch (error) {
-      console.error('Error fetching filters:', error);
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchVariants = async () => {
+    try {
+      const response = await BASE_URL.get('/dt-store/variants');
+      const data = response.data.result;
+      setColors([...new Set(data.map(variant => variant.color))]);
+      setSizes([...new Set(data.map(variant => variant.size))]);
+    } catch (error) {
+      console.error('Error fetching variants:', error);
     }
   };
 
   const fetchFilteredProducts = async () => {
     setLoading(true);
     try {
-      let categoryQuery = selectedCategories.map(cat => `category=${cat}`).join('&');
-      let colorQuery = selectedColors.map(color => `color=${color}`).join('&');
-      let sizeQuery = selectedSizes.map(size => `size=${size}`).join('&');
+      const filters = {
+        categories: selectedCategories,
+        colors: selectedColors,
+        sizes: selectedSizes,
+      };
 
-      const queryString = [categoryQuery, colorQuery, sizeQuery].filter(query => query).join('&');
-      const response = await BASE_URL.get(`/dt-store/products/filter?${queryString}`);
+      const response = await BASE_URL.get('/dt-store/products', { params: filters });
       const data = response.data.result;
-      setProducts(data); 
+      setProducts(data);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('Error fetching filtered products:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Hàm xử lý thay đổi cho Danh mục
   const toggleCategory = (category) => {
-    setSelectedCategories((prevSelected) =>
-      prevSelected.includes(category)
-        ? prevSelected.filter(item => item !== category)
-        : [...prevSelected, category]
+    setSelectedCategories((prev) => 
+      prev.includes(category)
+        ? prev.filter(item => item !== category)
+        : [...prev, category]
     );
   };
 
-  // Hàm xử lý thay đổi cho Màu sắc
   const toggleColor = (color) => {
-    setSelectedColors((prevSelected) =>
-      prevSelected.includes(color)
-        ? prevSelected.filter(item => item !== color)
-        : [...prevSelected, color]
+    setSelectedColors((prev) => 
+      prev.includes(color)
+        ? prev.filter(item => item !== color)
+        : [...prev, color]
     );
   };
 
-  // Hàm xử lý thay đổi cho Kích thước
   const toggleSize = (size) => {
-    setSelectedSizes((prevSelected) =>
-      prevSelected.includes(size)
-        ? prevSelected.filter(item => item !== size)
-        : [...prevSelected, size]
+    setSelectedSizes((prev) => 
+      prev.includes(size)
+        ? prev.filter(item => item !== size)
+        : [...prev, size]
     );
   };
 
   const toggleFilter = () => {
-    setFilterVisible(!filterVisible);
     Animated.timing(filterHeight, {
-      toValue: filterVisible ? 0 : 500,
-      duration: 400,
+      toValue: filterVisible ? 0 : 400,
+      duration: 300,
       useNativeDriver: false,
     }).start();
+    setFilterVisible(!filterVisible);
   };
 
   return (
@@ -117,7 +104,6 @@ const Filter = ({ navigation }) => {
           <Ionicons name="filter" size={24} color="#fff" onPress={toggleFilter} />
         </View>
       </View>
-
 
       <Animated.View style={[styles.filterContainer, { height: filterHeight }]}>
         <Text style={styles.label}>Danh mục:</Text>

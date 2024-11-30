@@ -35,6 +35,9 @@ const DetailProduct = ({ navigation }) => {
   const [availableSizes, setAvailableSizes] = useState([]);
 
   const [variants, setVariants] = useState([]);
+  const [selectedVariant, setSelectedVariant] = useState(null);
+
+  const [quantity, setQuantity] = useState(1);
 
   const fetchVariants = async () => {
     try {
@@ -56,10 +59,8 @@ const DetailProduct = ({ navigation }) => {
     if (variants.length > 0) {
       const sold = variants.reduce((total, variant) => total + variant.sold, 0);
     const remaining = variants.reduce((total, variant) => total + variant.stock, 0);
-    console.log(sold);
     setSolded(sold);
-    setRemain(remaining - sold);
-
+    setRemain(remaining);
     setTotalSold(sold);
     setTotalRemain(remaining);
 
@@ -67,13 +68,9 @@ const DetailProduct = ({ navigation }) => {
   }, [variants]);
 
 
-  const handleColorSelect = (color) => {
-    console.log(color);
-    
+  const handleColorSelect = (color) => {    
     setSelectedColor(color);
     const availableSizes = variants.filter((variant) => variant.color === color);
-    console.log(availableSizes);
-    
     setAvailableSizes(availableSizes.length > 0 ? availableSizes : []);
     setSelectedSize(null);
     setSolded(0);
@@ -82,9 +79,10 @@ const DetailProduct = ({ navigation }) => {
 
 
   const handleSizeSelect = (item) => {
+    setSelectedVariant(item);
     setSelectedSize(item.size);
     setSolded(item.sold);
-    setRemain(item.stock - item.sold);
+    setRemain(item.stock);
   };
 
 
@@ -107,7 +105,7 @@ const DetailProduct = ({ navigation }) => {
 
   const handleBuy = () => {
     setIsModalVisible(false)
-    navigation.navigate('Checkout')
+    navigation.navigate('Checkout',{product:product,imageUrl:imageUrl,variant:selectedVariant, quantity:quantity})
   }
 
   return (
@@ -255,7 +253,7 @@ const DetailProduct = ({ navigation }) => {
                   <TouchableWithoutFeedback key={index} onPress={() => handleSizeSelect(item)}>
                     <View
                       style={{
-                        width: 50,
+                        width: 60,
                         height: 40,
                         borderRadius: 5,
                         borderColor: selectedSize === item.size ? 'red' : '#ccc',
@@ -276,13 +274,14 @@ const DetailProduct = ({ navigation }) => {
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <Text style={{ padding: 10 }}>Số lượng</Text>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-                <TouchableWithoutFeedback onPress={() => console.log('tru')}>
+                <TouchableWithoutFeedback onPress={() => {quantity>1?setQuantity(quantity-1):console.log('khong the giam');
+                }}>
                   <View style={{ width: 30, height: 30, backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center' }}>
                     <Text>-</Text>
                   </View>
                 </TouchableWithoutFeedback>
-                <Text style={{ paddingHorizontal: 10 }}>1</Text>
-                <TouchableWithoutFeedback onPress={() => console.log('cong')}>
+                <Text style={{ paddingHorizontal: 10 }}>{quantity}</Text>
+                <TouchableWithoutFeedback onPress={() => setQuantity(quantity+1)}>
                   <View style={{ width: 30, height: 30, backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center' }}>
                     <Text>+</Text>
                   </View>

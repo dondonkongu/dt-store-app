@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import SwipperCategories from '../../components/SwipperCategories'
 import SwipperBanner from '../../components/SwipperBanner';
 import ProductSection from '../../components/ProductSection';
@@ -37,7 +37,7 @@ const Dt = () => {
       <View style={{ height:200 }}>
         <SwipperBanner data={imgBanner}/>
         </View>
-      <View style={{ height:217 }}>
+      <View style={{ height:216 }}>
         <SwipperCategories data={categories}/>
       </View>
       <View style={ styles.componentContainer}>
