@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, { useState, useRef, useCallback } from 'react';
 import { MAINCOLOR } from '../constants/color';
@@ -82,6 +83,7 @@ const Search = ({ navigation }) => {
           renderItem={({ item }) => {
             const mainImage = item.images.find((image) => image.isMain)?.url || '';
             return (
+              <TouchableWithoutFeedback onPress={()=>nav.navigate('DetailProduct',{idProduct:item.id})}>
               <View style={styles.resultItem}>
                 <Image
                   source={{ uri: mainImage }}
@@ -95,6 +97,7 @@ const Search = ({ navigation }) => {
                   </Text>
                 </View>
               </View>
+              </TouchableWithoutFeedback>
             );
           }}
           ListEmptyComponent={() => (
@@ -143,6 +146,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     alignItems: 'center',
+    backgroundColor: '#fff',  
   },
   productImage: {
     width: 60,

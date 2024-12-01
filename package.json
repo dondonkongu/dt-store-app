@@ -21,6 +21,7 @@
     "axios": "^1.7.7",
     "expo": "~51.0.28",
     "expo-status-bar": "~1.12.1",
+    "qs": "^6.13.1",
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-checkbox": "^2.0.0",

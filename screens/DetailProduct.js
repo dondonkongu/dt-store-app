@@ -15,7 +15,7 @@ const DetailProduct = ({ navigation }) => {
 
   const route = useRoute();
   const { idProduct } = route.params;
-  const { imageUrl } = route.params;
+  
 
 
 
@@ -96,6 +96,8 @@ const DetailProduct = ({ navigation }) => {
       console.log(err);
     }
   }
+  const mainImage = product.images?.find((image) => image.isMain);
+    const imageUrl = mainImage ? mainImage.url : null;
   
 
   const uniqueColors = [...new Set(variants.map((variant) => variant.color))];

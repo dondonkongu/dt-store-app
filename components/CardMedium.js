@@ -9,7 +9,7 @@ const CardMedium = ({data}) => {
     const mainImage = data.images?.find((image) => image.isMain);
     const imageUrl = mainImage ? mainImage.url : null;
   return (
-    <TouchableOpacity style={{ width: 205, height: 310, justifyContent:'center', alignItems:'center', paddingTop:10}}onPress={()=>nav.navigate('DetailProduct',{idProduct:data.id,imageUrl:imageUrl})}>
+    <TouchableOpacity style={{ width: 205, height: 310, justifyContent:'center', alignItems:'center', paddingTop:10}}onPress={()=>nav.navigate('DetailProduct',{idProduct:data.id})}>
         <View >
             <Image source={{ uri:imageUrl }}
             style={{ width: 205, height: 250 }} resizeMode='contain'

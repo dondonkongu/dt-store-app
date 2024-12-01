@@ -11,6 +11,7 @@ import PrivacyPolicy from './screens/policyScreen/PrivacyPolicy';
 import Checkout from './screens/CheckoutAndPayment/Checkout';
 import Search from './pages/Search';
 import Filter from './pages/Filter';
+import ProductFilter from './components/ProductFilter';
 
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ export default function App() {
         <Stack.Screen name="Checkout" component={Checkout} />
         <Stack.Screen name="Search" component={Search} />
         <Stack.Screen name="Filter" component={Filter} />
+        <Stack.Screen name="ProductFilter" component={ProductFilter} />
         </Stack.Navigator>
       </NavigationContainer>
       </AuthProvider>
