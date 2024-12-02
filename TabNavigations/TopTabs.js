@@ -20,6 +20,7 @@ const TopTabs = () => {
         tabBarIndicatorStyle: { backgroundColor: '#cc3333' },
         tabBarActiveTintColor: '#cc3333',
         tabBarInactiveTintColor: '#000',
+        
     }} 
     >
         <Tab.Screen name='DT' component={Dt} />
