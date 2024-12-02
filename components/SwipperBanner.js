@@ -6,11 +6,11 @@ import React from 'react'
 
 const SwipperBanner = ({data}) => {
   return (
-   <Swiper style={{  }} loop={true} autoplay={true}>
+   <Swiper style={{ height:250 }} loop={true} autoplay={true}>
 
     {data.map((item,index)=>{
         return(
-            <View key={index} style={{flex:1}}>
+            <View key={index} >
             <Image source={{uri:item.link}} style={{width:'100%',height:200}}/>
             </View>
         )

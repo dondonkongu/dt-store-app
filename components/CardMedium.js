@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View,Image } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { useNavigation } from '@react-navigation/native';
 
 const CardMedium = ({data}) => {
@@ -22,7 +22,7 @@ const CardMedium = ({data}) => {
   )
 }
 
-export default CardMedium
+export default memo(CardMedium)
 
 const styles = StyleSheet.create({
     textPrice: {

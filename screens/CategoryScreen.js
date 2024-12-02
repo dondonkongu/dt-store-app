@@ -6,8 +6,7 @@ import Collection from '../components/Collection'
 const CategoryScreen = () => {
   return (
     <View style={{ flex:1,justifyContent:'center',alignItems:'center' }}>
-      {/* <Text>CategoryScreen</Text> */}
-      <Collection />
+     
     
 
     </View>

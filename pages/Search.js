@@ -83,7 +83,7 @@ const Search = ({ navigation }) => {
           renderItem={({ item }) => {
             const mainImage = item.images.find((image) => image.isMain)?.url || '';
             return (
-              <TouchableWithoutFeedback onPress={()=>nav.navigate('DetailProduct',{idProduct:item.id})}>
+              <TouchableWithoutFeedback onPress={()=>navigation.navigate('DetailProduct',{idProduct:item.id})}>
               <View style={styles.resultItem}>
                 <Image
                   source={{ uri: mainImage }}
