@@ -73,7 +73,6 @@ const Dt = () => {
     { key: 'categories', component: <SwipperCategories data={categories} /> },
     { key: 'collectionF', component: <Collection data={collectionDataF} /> },
     { key: 'collectionS', component: <Collection data={collectionDataS} /> },
-
     { key: 'productSection', component: <ProductSection products={products} title="Sản phẩm mới" /> },
     { key: 'productList', component: <ProductList title="Sản phẩm DT" /> },
   ];

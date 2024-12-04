@@ -13,6 +13,9 @@ import Search from './pages/Search';
 import Filter from './pages/Filter';
 import ProductFilter from './components/ProductFilter';
 import CollectionDetail from './pages/CollectionDetail';
+import { CartProvider } from './context/CartContext';
+import CartScreen from './pages/CartScreen';
+import CartCheckOut from './pages/CartCheckOut';
 
 
 const Stack = createNativeStackNavigator();
@@ -20,6 +23,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
+    <CartProvider>
     <AuthProvider>
       <NavigationContainer >
        <Stack.Navigator screenOptions={{ headerShown:false, animation:'none' }}>
@@ -36,9 +40,12 @@ export default function App() {
         <Stack.Screen name="Filter" component={Filter} />
         <Stack.Screen name="ProductFilter" component={ProductFilter} />
         <Stack.Screen name="CollectionDetail" component={CollectionDetail} />
+        <Stack.Screen name="CartScreen" component={CartScreen} />
+        <Stack.Screen name="CartCheckOut" component={CartCheckOut} />
         </Stack.Navigator>
       </NavigationContainer>
       </AuthProvider>
+      </CartProvider>
   );
 }
 

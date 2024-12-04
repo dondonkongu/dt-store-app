@@ -20,7 +20,9 @@ const HomeScreen = ({navigation}) => {
           </TouchableWithoutFeedback>
           <View style={styles.icon}>
             <Ionicons name='notifications-outline' size={26} color='#fff' />
+            <TouchableOpacity onPress={()=>navigation.navigate('CartScreen')}>
             <Ionicons name='cart-outline' size={26} color='#fff' />
+            </TouchableOpacity>
           </View>
         </View>
       </View>

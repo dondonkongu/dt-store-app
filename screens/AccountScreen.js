@@ -9,7 +9,7 @@ import { getToken } from '../service/asyncStorageService';
 import { useState } from 'react';
 import BASE_URL from '../api';
 import MenuItem from '../components/MenuItem';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const AccountScreen = () => {
   const nav = useNavigation();
@@ -46,7 +46,7 @@ const AccountScreen = () => {
     };
 
     fetchUserData(); 
-}, [isLoggedIn]);
+}, []);
 
 const handleLogout = () => {
   logout()

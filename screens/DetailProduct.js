@@ -9,9 +9,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SizeChart from '../components/SizeChart';
 import { useRoute } from '@react-navigation/native';
 import BASE_URL from '../api';
+import { useCart } from '../context/CartContext'
+
 
 
 const DetailProduct = ({ navigation }) => {
+
+  const { addToCart } = useCart();
+
 
   const route = useRoute();
   const { idProduct } = route.params;
@@ -36,6 +41,7 @@ const DetailProduct = ({ navigation }) => {
 
   const [variants, setVariants] = useState([]);
   const [selectedVariant, setSelectedVariant] = useState(null);
+
 
   const [quantity, setQuantity] = useState(1);
 
@@ -290,8 +296,9 @@ const DetailProduct = ({ navigation }) => {
                 </TouchableWithoutFeedback>
               </View>
             </View>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-              <Button title='Mua ngay' width='100%' height={40} onPress={handleBuy} />
+            <View style={{ flex: 1, flexDirection:'row',gap:10, justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+              <Button title='Mua ngay' width='40%' height={40} onPress={handleBuy} />
+              <Button title='Thêm vào giỏ hàng' width='50%' height={40} onPress={()=>addToCart(product,imageUrl,selectedVariant,quantity)} />
             </View>
           </View>
         </View>
