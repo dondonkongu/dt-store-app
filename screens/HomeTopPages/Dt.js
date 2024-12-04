@@ -30,7 +30,9 @@ const imgBanner = [
 
 const Dt = () => {
   const [products, setProducts] = useState([]);
-  const [collectionData, setCollectionData] = useState([]);
+  const [collectionDataF, setCollectionDataF] = useState([]);
+  const [collectionDataS, setCollectionDataS] = useState([]);
+
 
   const fetchProducts = async () => {
     try {
@@ -41,26 +43,39 @@ const Dt = () => {
     }
   };
 
-  const fetchCollection = async () => {
+  const fetchCollectionF = async () => {
     try {
-      const response = await BASE_URL.get('/dt-store/collections/1');
-      setCollectionData(response.data.result);
+      const response = await BASE_URL.get('/dt-store/collections/3');
+      setCollectionDataF(response.data.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const fetchCollectionS = async () => {
+    try {
+      const response = await BASE_URL.get('/dt-store/collections/4');
+      setCollectionDataS(response.data.result);
     } catch (err) {
       console.log(err);
     }
   };
 
+
   useEffect(() => {
     fetchProducts();
-    fetchCollection();
+    fetchCollectionF();
+    fetchCollectionS();
+
   }, []);
 
   const sections = [
     { key: 'banner', component: <SwipperBanner data={imgBanner} /> },
     { key: 'categories', component: <SwipperCategories data={categories} /> },
-    { key: 'collection', component: <Collection data={collectionData} /> },
+    { key: 'collectionF', component: <Collection data={collectionDataF} /> },
+    { key: 'collectionS', component: <Collection data={collectionDataS} /> },
+
     { key: 'productSection', component: <ProductSection products={products} title="Sản phẩm mới" /> },
-    { key: 'productList', component: <ProductList title="Sản phẩm bán chạy" /> },
+    { key: 'productList', component: <ProductList title="Sản phẩm DT" /> },
   ];
 
   return (

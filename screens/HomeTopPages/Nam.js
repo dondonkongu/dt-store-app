@@ -20,7 +20,7 @@ const Nam = ({}) => {
 
   const fetchCollection = async () => {
     try {
-        const response = await BASE_URL.get('/dt-store/collections/2')
+        const response = await BASE_URL.get('/dt-store/collections/3')
         setCollectionData(response.data.result)
     } catch (err) {
         console.log(err);

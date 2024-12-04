@@ -54,24 +54,24 @@ const Filter = ({ navigation }) => {
     };
 
     const handleFilterSubmit = async () => {
-      try {
-          const params = {
-              categoryId:  selectedFilters.categoryId ,
-              subcategoryId: selectedFilters.subcategoryId ,
-              color:  selectedFilters.color ,
-              size:  selectedFilters.size ,
-          };          
-  
-          const response = await BASE_URL.get('/dt-store/products/filter', {
-              params: params,
-              paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }) 
-          });
-          navigation.navigate('ProductFilter', { products: response.data.result });
-  
-      } catch (error) {
-          console.error('Error applying filters:', error.response ? error.response.data : error.message);
-      }
-  };
+        try {
+            const params = {
+                categoryId: selectedFilters.categoryId,
+                subcategoryId: selectedFilters.subcategoryId,
+                color: selectedFilters.color,
+                size: selectedFilters.size,
+            };
+
+            const response = await BASE_URL.get('/dt-store/products/filter', {
+                params: params,
+                paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' })
+            });
+            navigation.navigate('ProductFilter', { products: response.data.result });
+
+        } catch (error) {
+            console.error('Error applying filters:', error.response ? error.response.data : error.message);
+        }
+    };
 
     const toggleSelection = (key, value) => {
         const current = selectedFilters[key];
@@ -83,11 +83,11 @@ const Filter = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Ionicons name="arrow-back" size={26} color="white" onPress={() => navigation.goBack()} />
-        <Text style={styles.headerText}>Bộ lọc</Text>
-        <View style={{ width: 26 }} />
-      </View>
+            <View style={styles.header}>
+                <Ionicons name="arrow-back" size={26} color="white" onPress={() => navigation.goBack()} />
+                <Text style={styles.headerText}>Bộ lọc</Text>
+                <View style={{ width: 26 }} />
+            </View>
             <FlatList
                 style={{ padding: 10 }}
                 data={categories}
@@ -164,10 +164,10 @@ const Filter = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,backgroundColor: '#f5f5f5',
-      },
-      header: {backgroundColor: MAINCOLOR,width: '100%', paddingHorizontal: 10,height: 70,flexDirection: 'row',justifyContent: 'space-between',alignItems: 'flex-end',paddingBottom: 5,},
-      headerText: {color: 'white',fontSize: 20,fontWeight: 'bold',},
+        flex: 1, backgroundColor: '#f5f5f5',
+    },
+    header: { backgroundColor: MAINCOLOR, width: '100%', paddingHorizontal: 10, height: 70, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', paddingBottom: 5, },
+    headerText: { color: 'white', fontSize: 20, fontWeight: 'bold', },
     title: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', color: '#333' },
     sectionTitle: { fontSize: 18, fontWeight: 'bold', marginVertical: 10, color: '#555' },
     checkboxContainer: {

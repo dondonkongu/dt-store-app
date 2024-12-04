@@ -12,6 +12,7 @@ import Checkout from './screens/CheckoutAndPayment/Checkout';
 import Search from './pages/Search';
 import Filter from './pages/Filter';
 import ProductFilter from './components/ProductFilter';
+import CollectionDetail from './pages/CollectionDetail';
 
 
 const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ export default function App() {
         <Stack.Screen name="Search" component={Search} />
         <Stack.Screen name="Filter" component={Filter} />
         <Stack.Screen name="ProductFilter" component={ProductFilter} />
+        <Stack.Screen name="CollectionDetail" component={CollectionDetail} />
         </Stack.Navigator>
       </NavigationContainer>
       </AuthProvider>

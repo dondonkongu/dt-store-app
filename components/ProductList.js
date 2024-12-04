@@ -18,7 +18,7 @@ const ProductList = ({ title }) => {
       if (newProducts.length > 0) {
         setProducts((prevProducts) => [...prevProducts, ...newProducts]);
       } else {
-        setIsEnd(true); // Không còn dữ liệu để tải
+        setIsEnd(true); 
       }
     } catch (err) {
       console.error(err);
@@ -64,8 +64,8 @@ const ProductList = ({ title }) => {
         data={products}
         renderItem={renderRow}
         keyExtractor={(item, index) => `product-${index}`}
-        onEndReached={loadMore} // Gọi khi chạm tới cuối danh sách
-        onEndReachedThreshold={0.9} // Kích hoạt khi gần tới cuối danh sách (50%)
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.9} 
         ListFooterComponent={
           loading ? (
             <ActivityIndicator size="small" color="#0000ff" style={{ marginVertical: 10 }} />

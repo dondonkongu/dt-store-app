@@ -21,20 +21,33 @@ const Nu = ({}) => {
   ]
 
   const [products, setProducts]= useState([])
-  const [collectionData, setCollectionData] = useState([])
+  const [collectionDataF, setCollectionDataF] = useState([])
+  const [collectionDataS, setCollectionDataS] = useState([])
 
-  const fetchCollection = async () => {
+
+  const fetchCollectionF = async () => {
     try {
-        const response = await BASE_URL.get('/dt-store/collections/1')
-        setCollectionData(response.data.result)
+        const response = await BASE_URL.get('/dt-store/collections/4')
+        setCollectionDataF(response.data.result)
     } catch (err) {
         console.log(err);
     }
 }
 
+const fetchCollectionS = async () => {
+  try {
+      const response = await BASE_URL.get('/dt-store/collections/5')
+      setCollectionDataS(response.data.result)
+  } catch (err) {
+      console.log(err);
+  }
+}
+
   useEffect(() => {
     fetchProducst()
-    fetchCollection()
+    fetchCollectionF()
+    fetchCollectionS()
+
   }, [])
 
   const fetchProducst =async()=>{
@@ -58,7 +71,8 @@ const Nu = ({}) => {
     </View>},
     {key:'categories',component:<SwipperCategories data={categories}/>},
     {key:'lastedProducts',component:<ProductSection products={products} title='Sản phẩm mới'/>},
-    {key:'collection',component:<Collection data={collectionData}/>},
+    {key:'collectionF',component:<Collection data={collectionDataF}/>},
+    {key:'collectionS',component:<Collection data={collectionDataS}/>},
     {key:'recomendProducts',component:<ProductSection products={products} title='Gợi ý cho bạn'/>}
 
   ]
