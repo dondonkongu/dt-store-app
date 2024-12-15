@@ -10,6 +10,8 @@ import SizeChart from '../components/SizeChart';
 import { useRoute } from '@react-navigation/native';
 import BASE_URL from '../api';
 import { useCart } from '../context/CartContext'
+import ProductSection from '../components/ProductSection'
+import RECOMMENDATION_URL from '../api/recommendation'
 
 
 
@@ -17,9 +19,12 @@ const DetailProduct = ({ navigation }) => {
 
   const { addToCart } = useCart();
 
-
   const route = useRoute();
-  const { idProduct } = route.params;
+  const { idProduct } = route.params
+
+  
+
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
   
 
 
@@ -54,12 +59,27 @@ const DetailProduct = ({ navigation }) => {
       console.log(err);
     }
   }
+  const fetchRecommendedProducts = async () => {
+    try {
+      const response = await RECOMMENDATION_URL.get(`/recommendations?product_id=${idProduct}`)
+      
+      setRecommendedProducts(response.data)
+  
+      
+    } catch (err) {
+      console.log(1,err);
+    }
+  }
+    
 
   useEffect(() => {
+    
     fetchProduct()
     fetchVariants()
+    fetchRecommendedProducts()
     
-  }, []);
+    
+  }, [idProduct]);
 
   useEffect(() => {
     if (variants.length > 0) {
@@ -119,7 +139,7 @@ const DetailProduct = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name='arrow-back' size={30} color='white' onPress={() => navigation.goBack()} />
+        <Ionicons name='arrow-back' size={30} color='white' onPress={() => navigation.navigate('BottomTabs')} />
         <Ionicons name='cart-outline' size={26} color='#fff' />
       </View>
       <ScrollView style={styles.content}>
@@ -188,6 +208,7 @@ const DetailProduct = ({ navigation }) => {
             <Text style={{ fontSize: 14 }}>- Khi phơi lộn trái và không phơi trực tiếp dưới ánh nắng mặt trời</Text>
           </View>
         </View>
+        <ProductSection products={recommendedProducts} title='Sản phẩm liên quan' />
 
       </ScrollView>
       <View style={styles.action}>

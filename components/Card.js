@@ -5,13 +5,23 @@ import { useNavigation } from '@react-navigation/native';
 const Card = ({ data }) => {
     const nav = useNavigation();
     
-    
-    const mainImage = data.images?.find((image) => image.isMain);
-    const imageUrl = mainImage ? mainImage.url : null;
+    let imageUrl = null;
 
+  if (Array.isArray(data.images)) {
+    const mainImage = data.images.find((image) => image.isMain);
+    imageUrl = mainImage ? mainImage.url : null;
+  } else {
+    imageUrl = data.images;
     
+  }
+ 
   return (
-    <TouchableWithoutFeedback style={{ width: 140, height: 250 }} onPress={()=>nav.navigate('DetailProduct',{idProduct:data.id})}>
+    <TouchableWithoutFeedback style={{ width: 140, height: 250 }} 
+    onPress={() => {
+      if (data && data.id) {
+        nav.replace('DetailProduct', { idProduct: data.id });
+      }
+    }}>
       <View style={{ width: 140, height: 250 }}>
         <Image 
           source={{ uri: imageUrl}}
